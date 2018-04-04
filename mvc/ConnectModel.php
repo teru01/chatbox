@@ -64,6 +64,9 @@ class ConnectModel{
     }
 
 
+    /**
+     * ConnectModel destructor.
+     */
     public function __destruct(){
         foreach ($this->_modelList as $model){
             unset($model);
