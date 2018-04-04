@@ -16,10 +16,16 @@ abstract class AppBase
     const MODELSDIR = '/models';
     const WEBDIR = '/mvc_htdocs';
     const CONTROLLERSDIR = '/controllers';
+    const NOTFOUNDMSG = 'FILE NOT FOUND.';
 
-    public function __construct($dspErr)
-    {
-
+    /**
+     * AppBase constructor.
+     * @param bool $dspErr
+     */
+    public function __construct(bool $dspErr){
+        $this->setDisplayErrors($dspErr);
+        $this->initialize();
+        $this->doDbConnection();
     }
 
     /**
@@ -49,18 +55,151 @@ abstract class AppBase
     }
 
     /**
+     * コントローラー、アクションを決定しコンテンツを取得、レスポンスを返す
+     */
+    public function run(){
+        try{
+            $parameters = $this->_router->getRouteParams($this->_request->getPath());
+            if ($parameters === false) {
+                throw new FileNotFoundException('NO ROUTE TO' . $this->_request->getPath());
+            }
+            $controller = $parameters["controller"];
+            $action = $parameters["action"];
+            $this->getContent($controller, $action, $parameters);
+        } catch (FileNotFoundException $e){
+            $this->dispErrorPage($e);
+        } catch (AutherizedException $e){
+            list($controller, $action) = $this->_signinAction;
+            $this->getContent($controller, $action);
+        }
+        $this->_response->send();
+    }
+
+    /**
+     * コントローラーに対するアクションを実行し、responseオブジェクトに格納する
+     * @param string $controllerName
+     * @param string $action
+     * @param array $parameters
+     */
+    public function getContent(string $controllerName, string $action, $parameters=[]){
+        $controllerClass = ucfirst($controllerName) . self::CONTROLLER;
+        $controller = $this->getControllerObject($controllerClass);
+        if (is_null($controller)){
+            throw new FileNotFoundException($controllerClass . 'NOT FOUND');
+        }
+        $content = $controller->dispatch($action, $parameters);
+        $this->_response->setContent($content);
+    }
+
+    /**
+     * Controllerオブジェクトを取得し返す
+     * @param string $controllerClass
+     * @return Controller | null
+     */
+    protected function getControllerObject(string $controllerClass){
+        if(!class_exists($controllerClass)){
+            $controllerFile = $this->getControllerDirectory() . '/' . $controllerClass . '.php';
+            if(!is_readable($controllerFile)){
+                return null;
+            }else{
+                require_once $controllerFile;
+                if(!class_exists($controllerClass)){
+                    return null;
+                }
+            }
+        }
+        $controller = new $controllerClass($this);
+        return $controller;
+    }
+
+
+    /**
+     * エラーメッセージを表示するページをresponseオブジェクトに格納する
+     * @param Exception $e
+     */
+    protected function dispErrorPage(Exception $e){
+        $this->_response->setStatusCode(404, self::NOTFOUNDMSG);
+        $errMessage = $this->isDisplayErrors() ? $e->getMessage() : self::NOTFOUNDMSG;
+        $errMessage = htmlspecialchars($errMessage, ENT_QUOTES, 'UTF-8');
+        $html = "
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8' />
+<title>HTTP 404 Error</title>
+</head>
+<body>
+{$errMessage}
+</body>
+</html>";
+        $this->_response->setContent($html);
+    }
+
+    /**
      * @return mixed
+     */
+    abstract protected function getRouteDefinition();
+
+    /**
+     *
+     */
+    protected function doDbConnection(){}
+
+    /**
+     * @return mixed
+     */
+    public function getRequest()
+    {
+        return $this->_request;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->_session;
+    }
+
+    /**
+     * @return ConnectModel
+     */
+    public function getConnectModel()
+    {
+        return $this->_connectModel;
+    }
+
+    /**
+     * @return bool
      */
     public function isDisplayErrors(){
         return $this->_displayErrors;
     }
 
-    public function run(){
-        try{
-            $parameters = $this->_router->getRouteParams($this->_request->getPath());
-
-        }
+    public function getViewDirectory(){
+        return $this->getRootDirectory() . self::VIEWDIR;
     }
 
+    public function getModelDirectory(){
+        return $this->getRootDirectory() . self::MODELSDIR;
+    }
+
+    public function getDocDirectory(){
+        return $this->getRootDirectory() . self::WEBDIR;
+    }
+
+    abstract public function getRootDirectory();
+
+    public function getControllerDirectory(){
+        return $this->getRootDirectory() . self::CONTROLLERSDIR;
+    }
 
 }
