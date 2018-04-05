@@ -60,7 +60,7 @@ abstract class AppBase
     public function run(){
         try{
             $parameters = $this->_router->getRouteParams($this->_request->getPath());
-            if ($parameters === false) {
+            if (is_null($parameters)) {
                 throw new FileNotFoundException('NO ROUTE TO' . $this->_request->getPath());
             }
             $controller = $parameters["controller"];

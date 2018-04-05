@@ -21,10 +21,10 @@ abstract class Controller{
     }
 
     /**
+     * アプリケーションのスーパクラスから呼ばれて、アクションメソッドを実行する
      * @param string $action
      * @param array $params
-     * @return $content
-     * アプリケーションのスーパクラスから呼ばれて、アクションメソッドを実行する
+     * @return string $content
      */
     public function dispatch(string $action, $params=[]){
         $this->_action = $action;
