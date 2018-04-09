@@ -1,0 +1,91 @@
+/* body要素（ページ本体）全体に適用するCSSルール */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: メイリオ ,Osaka;
+    color: #000000;
+    background-color: #f0f8ff
+}
+
+/* h2、h3要素に適用する */
+h2,h3 {
+    font-size: 1.0em;
+}
+
+/* a要素（リンク）に適用する */
+a {
+    color: #3399cc;
+}
+
+/* IDセレクター#headerに適用する */
+#header {
+    margin: 0;
+    padding: 0px;
+    border-top: 2px solid #ff0000;
+    border-bottom: 2px solid #ff0000;
+}
+
+/* IDセレクター#headerの要素に含まれるh1要素に適用する */
+#header h1 {
+    font-size: 1.4em;
+    font-family: Times New Romman ,Osaka;
+    margin: 5px 100px;
+}
+
+/* IDセレクター#headerの要素に含まれるh1→a要素に適用する */
+#header h1 a {
+    color: #ff0000;
+    text-decoration: none;
+}
+
+/* IDセレクター#headerの要素に含まれるh1→a要素がポイントされた際に適用する */
+#header h1 a:hover {
+    color: #ff6600;
+}
+
+/* IDセレクター#nav（ナビゲーション）の要素に適用する */
+#nav {
+    margin: 0 100px;
+}
+
+/* IDセレクター#main（メインコンテンツ）の要素に適用する */
+#main {
+    margin: 0 100px;
+}
+
+/* クラスセレクターstatusが適用されている要素に適用する */
+.status {
+    padding: 10px;
+    border: 2px solid #cccccc;
+    margin-bottom: 10px;
+    background-color: #ffffff
+}
+
+/* クラスセレクターerror_listが適用されているul要素に適用する */
+ul.error_list {
+    border: 1px solid #ff0000;
+    background-color: #ffcccc;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* クラスセレクターerror_listが適用されているul要素に含まれるli要素に適用する */
+ul.error_list li {
+    color: #ff0000;
+}
+/* クラスセレクターacountが適用されている要素に適用する */
+.acount {
+    float:left;
+    background-color: #ffcccc;
+    padding: 0px 30px 10px 30px;
+    width: 200px;
+}
+
+/* クラスセレクターf_userが適用されている要素に適用する */
+.f_user {
+    float:left;
+    background-color: #ffcccc;
+    padding: 0px 30px 10px 30px;
+    margin-left: 60px;
+    width: 200px;
+}
