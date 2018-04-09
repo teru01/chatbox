@@ -41,8 +41,8 @@ class Router{
         if('/' !== substr($path, 0, 1)){
             $path = '/' . $path;
         }
-        foreach ($this->_convertedRoutes as $pattern => $par){
-            if(preg_match('#^' . $pattern . '$#', $path, $p_match)){
+        foreach ($this->_convertedRoutes as $pattern => $par) {
+            if (preg_match('#^' . $pattern . '$#', $path, $p_match)) {
                 $par = array_merge($par, $p_match);
                 return $par;
             }
