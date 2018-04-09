@@ -21,6 +21,6 @@ class AccountController extends Controller{
         return $signup_view;
     }
 
-    
+
 
 }

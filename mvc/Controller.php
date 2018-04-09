@@ -14,10 +14,10 @@ abstract class Controller{
     public function __construct($application){
         $this->_controller     = strtolower(substr(get_class($this), 0, -10));
         $this->_application    = $application;
-        $this->_request        = $application->getRequestObject();
-        $this->_response       = $application->getResponseObject();
-        $this->_session        = $application->getSessionObject();
-        $this->_connect_model  = $application->getConnectModelObject();
+        $this->_request        = $application->getRequest();
+        $this->_response       = $application->getResponse();
+        $this->_session        = $application->getSession();
+        $this->_connect_model  = $application->getConnectModel();
     }
 
     /**
@@ -39,8 +39,7 @@ abstract class Controller{
         if($this->isAuthentication($action) && !$this->_session->isAuthenticated()){
             throw new AuthorizedException();
         }
-
-        $content = $action_method($params);
+        $content = $this->$action_method($params);
         return $content;
     }
 
