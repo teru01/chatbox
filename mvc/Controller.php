@@ -24,7 +24,9 @@ abstract class Controller{
      * アプリケーションのスーパクラスから呼ばれて、アクションメソッドを実行する
      * @param string $action
      * @param array $params
-     * @return string $content
+     * @return mixed
+     * @throws AuthorizedException
+     * @throws FileNotFoundException
      */
     public function dispatch(string $action, $params=[]){
         $this->_action = $action;
@@ -42,10 +44,19 @@ abstract class Controller{
         return $content;
     }
 
+    /**
+     * NOT FOUND例外を処理する
+     * @throws FileNotFoundException
+     */
     protected function httpNotFound(){
         throw new FileNotFoundException('FILE NOT FOUND' . $this->_controller . '/' . $this->_action);
     }
 
+    /**
+     * 呼び出すのに認証が必要なアクションメソッドか否か
+     * @param string $action
+     * @return bool
+     */
     protected function isAuthentication(string $action){
         if($this->_authentication === true
             || (is_array($this->_authentication)
@@ -56,6 +67,7 @@ abstract class Controller{
     }
 
     /**
+     * Viewクラスのrender()を呼び出しコンテンツを返す
      * @param array $param
      * @param string|null $viewFile
      * @param string|null $template
@@ -82,6 +94,11 @@ abstract class Controller{
         return $contents;
     }
 
+
+    /**
+     * 指定されたURLにリダイレクトを行う
+     * @param string $url
+     */
     protected function redirect(string $url){
         $host = $this->_request->getHostName();
         $base_url = $this->_request->getBaseUrl();
@@ -91,8 +108,7 @@ abstract class Controller{
     }
 
     /**
-     * アクションメソッドにより呼び出される。トークンを作成してトークンリストに追加し、新たに作成したトークンを返す。
-     *
+     * アクションメソッドにより呼び出される。トークンを作成してトークンリストに追加し、新たに作成したトークンを返す
      * @param string $form コントローラー名/アクション名
      * @return string $token
      */

@@ -1,6 +1,4 @@
 <?php
-
-
 abstract class AppBase
 {
     protected $_request;
@@ -8,7 +6,7 @@ abstract class AppBase
     protected $_session;
     protected $_connectModel;
     protected $_router;
-    protected $_signinAction = array();
+    protected $_signinAction = [];
     protected $_displayErrors;
 
     const CONTROLLER = 'Controller';
@@ -68,7 +66,7 @@ abstract class AppBase
             $this->getContent($controller, $action, $parameters);
         } catch (FileNotFoundException $e){
             $this->dispErrorPage($e);
-        } catch (AutherizedException $e){
+        } catch (AuthorizedException $e){
             list($controller, $action) = $this->_signinAction;
             $this->getContent($controller, $action);
         }
@@ -80,6 +78,8 @@ abstract class AppBase
      * @param string $controllerName
      * @param string $action
      * @param array $parameters
+     * @throws AuthorizedException
+     * @throws FileNotFoundException
      */
     public function getContent(string $controllerName, string $action, $parameters=[]){
         $controllerClass = ucfirst($controllerName) . self::CONTROLLER;

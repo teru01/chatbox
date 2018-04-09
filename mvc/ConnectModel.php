@@ -6,6 +6,7 @@ class ConnectModel{
     const MODEL = 'Model';
 
     /**
+     * DBに接続する
      * @param string $name
      * @param string $connection_strings
      */
@@ -25,6 +26,7 @@ class ConnectModel{
     }
 
     /**
+     * 最新または$nameで渡されたPDOインスタンスを返す
      * @param string|null $name
      * @return mixed
      */
@@ -37,6 +39,7 @@ class ConnectModel{
     }
 
     /**
+     * $_connectNameがセットされて入ればそれでgetConnection()を呼び出す
      * @return mixed
      */
     public function getModelConnection(){
@@ -50,6 +53,7 @@ class ConnectModel{
     }
 
     /**
+     * モデルクラスをインスタンス化して$_modelListにセットしそれを返す
      * @param string $model_name
      * @return mixed
      */
