@@ -2,7 +2,6 @@
 abstract class ExecuteModel{
     protected $_pdo;
 
-
     /**
      * ExecuteModel constructor.
      * @param PDO $pdo

@@ -15,6 +15,7 @@ class View{
     }
 
     /**
+     * テンプレートを再帰的に読み込んでhtmlの文字列を返す
      * @param string $filename
      * @param array $parameters
      * @param string|null $template
@@ -37,6 +38,11 @@ class View{
         return $content;
     }
 
+    /**
+     * インジェクション対策のためエスケープを施す
+     * @param string $string
+     * @return string
+     */
     public function escape(string $string){
         return htmlspecialchars($string, ENT_QUOTES);
     }
