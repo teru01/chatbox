@@ -8,9 +8,9 @@ class ConnectModel{
     /**
      * DBに接続する
      * @param string $name
-     * @param string $connection_strings
+     * @param array $connection_strings
      */
-    public function connect(string $name, string $connection_strings){
+    public function connect(string $name, array $connection_strings){
         try{
             $cnt = new PDO(
                 $connection_strings['string'],
