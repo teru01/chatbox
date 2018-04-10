@@ -10,7 +10,7 @@ class AccountController extends Controller{
     const USERMODEL_PREF = 'User';
 
     /**
-     * サインアップのアクションメソッド
+     * アカウント登録画面を発行するアクションメソッド
      * @return string
      */
     public function signupAction(){
@@ -26,6 +26,11 @@ class AccountController extends Controller{
         return $signup_view;
     }
 
+    /**
+     * アカウントの登録を行うアクションメソッド
+     * @return string|void
+     * @throws FileNotFoundException
+     */
     public function registerAction(){
 
         if(!$this->_request->isPost()){
@@ -60,15 +65,15 @@ class AccountController extends Controller{
             $this->_session->setAuthenticateStatus(true);
             $user = $this->_connect_model->get(self::USERMODEL_PREF)->getUserRecord($user_name);
             $this->_session->set('user', $user);
-            return $this->redirect('/');
-        }else{
-            return $this->render([
-                self::USER_NAME => $user_name,
-                self::PASSWD    => $password,
-                'errors'        => $errors,
-                self::TOKEN     => $this->getToken(self::SIGNUP),
-            ], 'signup');
+            $this->redirect('/');
         }
+        return $this->render([
+            self::USER_NAME => $user_name,
+            self::PASSWD    => $password,
+            'errors'        => $errors,
+            self::TOKEN     => $this->getToken(self::SIGNUP),
+        ], 'signup');
+
     }
 
 
