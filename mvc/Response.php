@@ -7,9 +7,9 @@ class Response{
     const HTTP = 'HTTP/1.1';
 
     /**
-     * @param string $content
+     * @param string|null $content
      */
-    public function setContent(string $content){
+    public function setContent(?string $content){
         $this->_content = $content;
     }
 

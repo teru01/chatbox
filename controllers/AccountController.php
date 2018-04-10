@@ -20,12 +20,14 @@ class AccountController extends Controller{
         $signup_view = $this->render([
             self::USER_NAME => '',
             self::PASSWD    => '',
-            self::TOKEN        => $this->getToken(self::SIGNUP),
+            self::TOKEN     => $this->getToken(self::SIGNUP),
         ]);
+
         return $signup_view;
     }
 
     public function registerAction(){
+
         if(!$this->_request->isPost()){
             $this->httpNotFound();
         }
@@ -41,7 +43,7 @@ class AccountController extends Controller{
 
         if(!strlen($user_name)){
             $errors[] = 'ユーザーIDが未入力です';
-        }elseif (!preg_match('#^\w{3, 20}$#', $user_name)){
+        }elseif (!preg_match('/^\w{3,20}$/', $user_name)){
             $errors[] = 'ユーザーIDは3文字から20文字です';
         }elseif ($this->_connect_model->get(self::USERMODEL_PREF)->isOverlapUserName($user_name)){
             $errors[] = 'ユーザーIDはすでに使われています。';
@@ -67,8 +69,6 @@ class AccountController extends Controller{
                 self::TOKEN     => $this->getToken(self::SIGNUP),
             ], 'signup');
         }
-
-        
     }
 
 

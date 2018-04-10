@@ -7,9 +7,9 @@ class Session{
      * Session constructor.
      */
     public function __construct(){
-        if(self::$_session_flag){
+        if(!self::$_session_flag){
             session_start();
-            self::$_generated_flag = true;
+            self::$_session_flag = true;
         }
     }
 
