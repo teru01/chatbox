@@ -40,10 +40,10 @@ class View{
 
     /**
      * インジェクション対策のためエスケープを施す
-     * @param string $string
+     * @param null|string $string
      * @return string
      */
-    public function escape(string $string){
+    public function escape(?string $string){
         return htmlspecialchars($string, ENT_QUOTES);
     }
 }

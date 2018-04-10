@@ -55,7 +55,7 @@ class ConnectModel{
     /**
      * モデルクラスをインスタンス化して$_modelListにセットしそれを返す
      * @param string $model_name
-     * @return mixed
+     * @return PDO
      */
     public function get(string $model_name){
         if(!isset($this->_modelList[$model_name])){

@@ -33,13 +33,13 @@ class UserModel extends ExecuteModel{
      * @param string $user_name
      * @return bool
      */
-    public function isNotOverlapUserName(string $user_name){
+    public function isOverlapUserName(string $user_name){
         $sql = "SELECT COUNT(id) AS count FROM user WHERE user_name = :user_name";
         $row = $this->getRecord($sql, [':user_name' => $user_name]);
         if($row['count'] === '0'){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
 
