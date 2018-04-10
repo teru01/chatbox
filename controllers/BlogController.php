@@ -27,6 +27,11 @@ class BlogController extends Controller {
         return $index_view;
     }
 
+    /**
+     * フォームから投稿された記事をDBに登録する
+     * @return string|void
+     * @throws FileNotFoundException
+     */
     public function postAction(){
         if(!$this->_request->isPost()){
             $this->httpNotFound();

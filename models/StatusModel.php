@@ -12,7 +12,7 @@ class StatusModel extends ExecuteModel {
         $this->execute($sql, [
             ':user_id'    => $user_id,
             ':message'    => $message,
-            ':time_stamp' => $now
+            ':time_stamp' => $now->format('Y-m-d H:i:s')
         ]);
     }
 
