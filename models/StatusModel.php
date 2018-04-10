@@ -16,6 +16,11 @@ class StatusModel extends ExecuteModel {
         ]);
     }
 
+    /**
+     * 自分かフォローしている人の全ての情報を返す
+     * @param int $user_id
+     * @return mixed
+     */
     public function getUserData(int $user_id){
         $sql = "SELECT st.*, us.user_name
                 FROM   status st LEFT JOIN user us ON st.user_id = us.id
@@ -25,4 +30,6 @@ class StatusModel extends ExecuteModel {
                 ORDER BY st.time_stamp DESC";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
+
+
 }
