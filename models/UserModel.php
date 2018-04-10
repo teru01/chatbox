@@ -10,7 +10,7 @@ class UserModel extends ExecuteModel{
         $password = password_hash($password, PASSWORD_DEFAULT);
         $now = new DateTime();
         $sql = "INSERT INTO user(user_name, password, time_stamp) VALUES(:user_name, :password, :time_stamp)";
-        $stmt = $this->execute($sql, [
+        $this->execute($sql, [
                 ':user_name'  => $user_name,
                 ':password'   => $password,
                 ':time_stamp' => $now->format('Y-m-d H:i:s'),
