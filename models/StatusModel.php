@@ -17,7 +17,7 @@ class StatusModel extends ExecuteModel {
     }
 
     /**
-     * 自分かフォローしている人の全ての情報を返す
+     * 自分とフォローしている人の全ての情報をDBから取得し返す
      * @param int $user_id
      * @return mixed
      */
@@ -27,6 +27,19 @@ class StatusModel extends ExecuteModel {
                                  LEFT JOIN followingUser f ON f.following_id = st.user_id
                                                            AND f.user_id = :user_id
                 WHERE  f.user_id = :user_id OR us.id = :user_id
+                ORDER BY st.time_stamp DESC";
+        return $this->getAllRecord($sql, [':user_id' => $user_id]);
+    }
+
+    /**
+     * 渡されたユーザーIDの投稿とユーザ情報をDBから全て取得し返す
+     * @param int $user_id
+     * @return mixed
+     */
+    public function getPostedMessage(int $user_id){
+        $sql = "SELECT st.*, u.user_name
+                FROM status st LEFT JOIN user u ON st.user_id = u.id
+                WHERE u.id = :user_id
                 ORDER BY st.time_stamp DESC";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
