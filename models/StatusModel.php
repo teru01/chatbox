@@ -44,5 +44,18 @@ class StatusModel extends ExecuteModel {
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
 
+    /**
+     * 渡された記事IDとユーザ名に一致する記事をDBから取得し返す
+     * @param int $status_id
+     * @param string $user_name
+     * @return mixed
+     */
+    public function getSpecificMessage(int $status_id, string $user_name){
+        $sql = "SELECT st.*, u.user_name
+                FROM status st LEFT JOIN user u ON st.user_id = u.id
+                WHERE st.id = :status_id AND u.user_name = :user_name";
+        return $this->getRecord($sql, [':status_id' => $status_id, ':user_name' => $user_name]);
+    }
+
 
 }
