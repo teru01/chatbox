@@ -4,12 +4,14 @@ class BlogController extends Controller {
     const ID   = 'id';
     const STATUSMODEL_PREF = 'Status';
     const USERMODEL_PREF = 'User';
+    const FollowingModel_PREF = 'Following';
     const STATUSES = 'statuses';
     const TOKEN = '_token';
     const MESSAGE = 'message';
     const POST = 'status/post';
     const FOLLOW = 'account/follow';
     protected $_authentication = ['index', 'post'];
+
 
     /**
      * ユーザー専用ページを発行するアクションメソッド
@@ -69,7 +71,7 @@ class BlogController extends Controller {
     }
 
     /**
-     * 特定ユーザーの全ての投稿を発行する
+     * 特定ユーザーの全ての投稿とフォローボタンを発行する
      * @param $par
      * @return string
      * @throws FileNotFoundException
@@ -89,9 +91,21 @@ class BlogController extends Controller {
             ->get(self::STATUSMODEL_PREF)
             ->getPostedMessage($user_data[self::ID]);
 
+        $following = null;
+        if($this->_session->isAuthenticated()){
+            $login_user = $this->_session->get(self::USER);
+            if($login_user[self::ID] !== $user_data[self::ID]){
+                $following = $this
+                    ->_connect_model
+                    ->get(self::FollowingModel_PREF)
+                    ->isFollowingUser($login_user[self::ID], $user_data[self::ID]);
+            }
+        }
+
         return $this->render([
             self::USER => $user_data,
             self::STATUSES => $posted_data,
+            'following' => $following,
             self::TOKEN => $this->getToken(self::FOLLOW),
         ]);
     }

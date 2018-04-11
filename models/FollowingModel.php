@@ -17,7 +17,7 @@ class FollowingModel extends ExecuteModel{
      * @param int $follow_id
      * @return bool
      */
-    public function isFollowUser(int $user_id, int $follow_id){
+    public function isFollowingUser(int $user_id, int $follow_id){
         $sql = "SELECT COUNT(user_id) AS count
                 FROM followingUser 
                 WHERE user_id = :user_id AND following_id = :follow_id";
