@@ -159,6 +159,15 @@ class AccountController extends Controller{
         ], 'signin');
     }
 
+    /**
+     * サインアウト処理を行うアクションメソッド
+     */
+    public function signoutAction(){
+        $this->_session->clear();
+        $this->_session->setAuthenticateStatus(false);
+        return $this->redirect('/' . self::SIGNIN);
+    }
+
 
 
 }
