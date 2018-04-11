@@ -3,6 +3,7 @@ class BlogController extends Controller {
     const USER = 'user';
     const ID   = 'id';
     const STATUSMODEL_PREF = 'Status';
+    const USERMODEL_PREF = 'User';
     const STATUSES = 'statuses';
     const TOKEN = '_token';
     const MESSAGE = 'message';
@@ -65,4 +66,53 @@ class BlogController extends Controller {
             self::TOKEN => $this->getToken(self::POST)
         ], 'index');
     }
+
+    /**
+     * 特定ユーザーの全ての投稿を発行する
+     * @param $par
+     * @return string
+     * @throws FileNotFoundException
+     */
+    public function userAction($par){
+        $user_data = $this
+            ->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->getUserRecord($par['user_name']);
+
+        if(!$user_data) {
+            $this->httpNotFound();
+        }
+
+        $posted_data = $this
+            ->_connect_model
+            ->get(self::STATUSMODEL_PREF)
+            ->getPostedMessage($user_data[self::ID]);
+
+        return $this->render([
+            self::USER => $user_data,
+            self::STATUSES => $posted_data,
+            self::TOKEN => $this->getToken(self::FOLLOW),
+        ]);
+    }
+
+    /**
+     * 特定の1記事を発行する
+     * @param $par
+     * @return string
+     * @throws FileNotFoundException
+     */
+    public function specificAction($par){
+        $posted_data = $this
+            ->_connect_model
+            ->get(self::STATUSMODEL_PREF)
+            ->getSpecificMessage($par[self::ID], $par['user_name']);
+
+        if(!$posted_data) {
+            $this->httpNotFound();
+        }
+
+        return $this->render(['status' => $posted_data]);
+    }
+
+
 }
