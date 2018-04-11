@@ -2,7 +2,7 @@
 require_once 'MysqlAccessData.php';
 
 class BlogApp extends AppBase{
-
+    protected $_signinAction = ['account', 'signin'];
     /**
      * DBに接続する
      */

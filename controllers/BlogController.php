@@ -9,6 +9,7 @@ class BlogController extends Controller {
     const MESSAGE = 'message';
     const POST = 'status/post';
     const FOLLOW = 'account/follow';
+    protected $_authentication = ['index', 'post'];
 
     /**
      * ユーザー専用ページを発行するアクションメソッド
