@@ -9,6 +9,13 @@ class AccountController extends Controller{
     const TOKEN = '_token';
     const USERMODEL_PREF = 'User';
 
+
+    public function indexAction(){
+        $user_data = $this->_session->get('user');
+        $followingUsers = $this->_connect_model->get(self::USERMODEL_PREF);
+        return $this->render(['user' => $user_data,]);
+    }
+
     /**
      * アカウント登録画面を発行するアクションメソッド
      * @return string
