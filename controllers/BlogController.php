@@ -1,12 +1,6 @@
 <?php
 class BlogController extends Controller {
-    const USER = 'user';
-    const ID   = 'id';
-    const STATUSMODEL_PREF = 'Status';
-    const USERMODEL_PREF = 'User';
-    const FollowingModel_PREF = 'Following';
     const STATUSES = 'statuses';
-    const TOKEN = '_token';
     const MESSAGE = 'message';
     const POST = 'status/post';
     const FOLLOW = 'account/follow';

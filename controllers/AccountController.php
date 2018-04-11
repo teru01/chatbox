@@ -6,8 +6,6 @@ class AccountController extends Controller{
     const FOLLOW = 'account/follow';
     const USER_NAME = 'user_name';
     const PASSWD = 'password';
-    const TOKEN = '_token';
-    const USERMODEL_PREF = 'User';
     const ACCOUNT_PATH = '/account';
 
 
@@ -166,6 +164,41 @@ class AccountController extends Controller{
         $this->_session->clear();
         $this->_session->setAuthenticateStatus(false);
         return $this->redirect('/' . self::SIGNIN);
+    }
+
+    /**
+     * フォローする人とされる人を登録する
+     * @throws FileNotFoundException
+     */
+    public function followAction(){
+        if(!$this->_request->isPost()){
+            $this->httpNotFound();
+        }
+
+        $followed_user_name = $this->_request->getPost('follow_user_name');
+        if(!$followed_user_name){
+            $this->httpNotFound();
+        }
+
+        $token = $this->_request->getPost(self::TOKEN);
+        if(!$this->checkToken(self::FOLLOW, $token)){
+            return $this->redirect('/user/' . $followed_user_name);
+        }
+
+        $flwed_user_data = $this->_connect_model
+                                   ->get(self::USERMODEL_PREF)
+                                   ->getUserRecord($followed_user_name);
+        if(!$flwed_user_data) {
+            $this->httpNotFound();
+        }
+
+        $flwing_user_data = $this->_session->get(self::USER);
+        $followTblConnection = $this->_connect_model->get(self::FollowingModel_PREF);
+        if($flwing_user_data[self::ID] !== $flwed_user_data[self::ID]
+            && !$followTblConnection->isFollowingUser($flwing_user_data[self::ID], $flwed_user_data[self::ID])){
+            $followTblConnection->registerFollowUser($flwing_user_data[self::ID], $flwed_user_data[self::ID]);
+        }
+        return $this->redirect(self::ACCOUNT_PATH);
     }
 
 

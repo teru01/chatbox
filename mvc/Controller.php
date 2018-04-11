@@ -10,6 +10,12 @@ abstract class Controller{
     protected $_authentication = [];
     const PROTOCOL = 'http://';
     const ACTION = 'Action';
+    const STATUSMODEL_PREF = 'Status';
+    const USERMODEL_PREF = 'User';
+    const FollowingModel_PREF = 'Following';
+    const USER = 'user';
+    const ID   = 'id';
+    const TOKEN = '_token';
 
     public function __construct($application){
         $this->_controller     = strtolower(substr(get_class($this), 0, -10));
