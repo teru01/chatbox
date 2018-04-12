@@ -15,8 +15,11 @@ class AccountController extends Controller{
      */
     public function indexAction(){
         $user_data = $this->_session->get('user');
-        $followingUsers = $this->_connect_model->get(self::USERMODEL_PREF);
-        return $this->render(['user' => $user_data,]);
+        $followingUsers = $this
+            ->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->getFollowingUser($user_data[self::ID]);
+        return $this->render(['user' => $user_data, 'followingUsers' => $followingUsers]);
     }
 
     /**

@@ -6,7 +6,7 @@
 <?php else: ?>
 <form action="<?php print $base_url; ?>/follow" method="post">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
-    <input type="hidden" name="follow_user_name" value="<?php print $this->escape($user['user_name']); ?>">
+    <input type="hidden" name="followed_user_name" value="<?php print $this->escape($user['user_name']); ?>">
     <input type="submit" value="フォローする">
 </form>
 <?php endif; ?>
