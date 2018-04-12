@@ -19,7 +19,7 @@
     <ul>
         <?php foreach ($followingUsers as $fuser): ?>
         <li>
-            <a href="<?php print $base_url; ?>/account/<?php print $this->escape($fuser['user_name']); ?>">
+            <a href="<?php print $base_url; ?>/user/<?php print $this->escape($fuser['user_name']); ?>">
                 <?php print $this->escape($fuser['user_name']); ?>
             </a>
         </li>
