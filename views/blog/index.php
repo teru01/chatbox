@@ -6,9 +6,7 @@ $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
     <?php print $this->render('errors', ['errors' => $errors]); ?>
     <?endif; ?>
     <p>投稿する記事を入力:</p>
-    <textarea name="message" rows="4" cols="70">
-        <?php print $this->escape($message); ?>
-    </textarea>
+    <textarea name="message" rows="4" cols="70"><?php print $this->escape($message); ?></textarea>
     <p><input type="submit" value="投稿"></p>
 </form>
 <hr>
