@@ -14,7 +14,7 @@ class AccountController extends Controller{
      * @return string
      */
     public function indexAction(){
-        $user_data = $this->_session->get('user');
+        $user_data = $this->_session->get(self::USER);
         $followingUsers = $this
             ->_connect_model
             ->get(self::USERMODEL_PREF)
@@ -178,7 +178,7 @@ class AccountController extends Controller{
             $this->httpNotFound();
         }
 
-        $followed_user_name = $this->_request->getPost('follow_user_name');
+        $followed_user_name = $this->_request->getPost('followed_user_name');
         if(!$followed_user_name){
             $this->httpNotFound();
         }
