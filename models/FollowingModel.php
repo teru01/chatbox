@@ -22,7 +22,7 @@ class FollowingModel extends ExecuteModel{
                 FROM followingUser 
                 WHERE user_id = :user_id AND following_id = :follow_id";
         $dat = $this->getRecord($sql, [':user_id' => $user_id, ':follow_id' => $follow_id]);
-        if($dat['count'] !== '0'){
+        if ($dat['count'] !== '0') {
             return true;
         }
         return false;

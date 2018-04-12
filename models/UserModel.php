@@ -42,5 +42,17 @@ class UserModel extends ExecuteModel{
         return true;
     }
 
+    /**
+     * フォローしている人の情報をDBから取得し返す
+     * @param int $user_id
+     * @return mixed
+     */
+    public function getFollowingUser(int $user_id){
+        $sql = "SELECT    u.*
+                FROM      user u
+                LEFT JOIN follwingUser f ON f.following_id = u.id
+                WHERE     f.user_id = :user_id";
+        return $this->getAllRecord($sql, [':user_id' => $user_id]);
+    }
 
 }
