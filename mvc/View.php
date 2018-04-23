@@ -26,7 +26,7 @@ class View{
         extract(array_merge($this->_initialValue, $parameters));
         ob_start();
         ob_implicit_flush(0);
-        require $view;
+        include $view;
         $content = ob_get_clean();
 
         if($template){

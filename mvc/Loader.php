@@ -29,7 +29,7 @@ class Loader{
         foreach ($this->_directories as $dir){
             $file = $dir . '/' . $class . '.php';
             if(is_readable($file)){
-                require $file;
+                require_once $file;
                 return;
             }
         }
