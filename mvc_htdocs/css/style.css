@@ -17,12 +17,16 @@ a {
     color: #3399cc;
 }
 
+button > a {
+    color: white;
+}
+
 /* IDセレクター#headerに適用する */
 #header {
     margin: 0;
     padding: 0px;
-    border-top: 2px solid #ff0000;
-    border-bottom: 2px solid #ff0000;
+    border-top: 2px solid #cccccc;
+    border-bottom: 2px solid #cccccc;
 }
 
 /* IDセレクター#headerの要素に含まれるh1要素に適用する */
@@ -32,30 +36,23 @@ a {
     margin: 5px 100px;
 }
 
-/* IDセレクター#headerの要素に含まれるh1→a要素に適用する */
-#header h1 a {
-    color: #ff0000;
-    text-decoration: none;
-}
-
-/* IDセレクター#headerの要素に含まれるh1→a要素がポイントされた際に適用する */
-#header h1 a:hover {
-    color: #ff6600;
-}
-
 /* IDセレクター#nav（ナビゲーション）の要素に適用する */
 #nav {
     margin: 0 100px;
 }
 
-/* IDセレクター#main（メインコンテンツ）の要素に適用する */
-#main {
-    margin: 0 100px;
+#nav button {
+
 }
+
+/* IDセレクター#main（メインコンテンツ）の要素に適用する */
+/*#main {*/
+    /*margin: 0 100px;*/
+/*}*/
 
 /* クラスセレクターstatusが適用されている要素に適用する */
 .status {
-    padding: 10px;
+    /*padding: 10px;*/
     border: 2px solid #cccccc;
     margin-bottom: 10px;
     background-color: #ffffff
