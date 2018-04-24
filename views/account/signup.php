@@ -1,5 +1,6 @@
 <?php $this->setPageTitle('title', 'アカウントを作成') ?>
 <h2>ユーザーアカウントを作成</h2>
+<div class="container">
 <form action="<?php print $base_url; ?>/account/register" method="post">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
     <?php if(isset($errors) && count($errors) > 0): ?>
@@ -12,3 +13,4 @@
         ]); ?>
     <p><input type="submit" value="登録"></p>
 </form>
+</div>

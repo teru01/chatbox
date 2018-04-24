@@ -3,6 +3,7 @@
 <p>
     <a href="<?php print $base_url; ?>/account/signup">アカウントを作成</a>
 </p>
+<div class="container">
 <form action="<?php print $base_url; ?>/account/authenticate" method="post">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
     <?php if (isset($errors) && count($errors) > 0){
@@ -12,4 +13,5 @@
     ?>
     <p><input type="submit" value="サインイン"></p>
 </form>
+</div>
 
