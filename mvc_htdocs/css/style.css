@@ -13,7 +13,7 @@ h2,h3 {
 }
 
 /* IDセレクター#headerの要素に含まれるh1要素に適用する */
-#header a {
+#header img {
     margin: 5px 100px;
 }
 
@@ -35,9 +35,12 @@ h2,h3 {
     clear: both;
 }
 
-button > a {
+.btn a {
     color: #fafafa;
+
 }
+
+
 
 /* クラスセレクターstatusが適用されている要素に適用する */
 .status {

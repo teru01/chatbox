@@ -12,43 +12,27 @@
 </head>
 <body>
 <div id="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-3">
-                <a href="<?php print $base_url; ?>/"><img src="/images/logo.png"></a>
-            </div>
-            <div class="col-xs-6 col-md-offset-6">
-                <p>
-                    <?php if($session->isAuthenticated()): ?>
-                    <button type="button" class="btn btn-success">
-                        <a href="<?php print $base_url; ?>/">
-                            トップページ
-                        </a>
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                        <a href="<?php print $base_url; ?>/account">
-                            アカウント
-                        </a>
-                    </button>
+    <a href="<?php print $base_url; ?>/"><img src="/images/logo.png"></a>
+    <div id="nav">
+        <?php if($session->isAuthenticated()): ?>
+        <a href="<?php print $base_url; ?>/" class="btn btn-success">
+                トップページ
+        </a>
+        <a href="<?php print $base_url; ?>/account" class="btn btn-primary">
+            アカウント
+        </a>
 
-                    <?php else: ?>
-                    <button type="button" class="btn btn-success">
-                    <a href="<?php print $base_url; ?>/account/signin">
-                        サインイン
-                    </a>
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                    <a href="<?php print $base_url; ?>/account/signup">
-                        アカウントを作成
-                    </a>
-                    </button>
-                    <?php endif; ?>
-                </p>
-            </div>
-        </div>
+        <?php else: ?>
+        <a href="<?php print $base_url; ?>/account/signin" class="btn btn-success">
+            サインイン
+        </a>
+        <a href="<?php print $base_url; ?>/account/signup" class="btn btn-primary">
+            アカウントを作成
+        </a>
+        <?php endif; ?>
     </div>
-<!--    <div class="sep"></div>-->
 </div>
+<div class="sep"></div>
 <div class="container">
 <div id="main">
     <?php print $_content; ?>
