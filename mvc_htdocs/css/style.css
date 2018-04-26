@@ -12,50 +12,39 @@ h2,h3 {
     font-size: 1.0em;
 }
 
-/* a要素（リンク）に適用する */
-a {
-    color: #3399cc;
-}
-
-button > a {
-    color: white;
-}
-
-/* IDセレクター#headerに適用する */
-#header {
-    margin: 0;
-    padding: 0px;
-    border-top: 2px solid #cccccc;
-    border-bottom: 2px solid #cccccc;
-}
-
 /* IDセレクター#headerの要素に含まれるh1要素に適用する */
-#header h1 {
-    font-size: 1.4em;
-    font-family: Times New Romman ,Osaka;
+#header a {
     margin: 5px 100px;
+}
+
+#header {
+    border-bottom: 2px solid #cccccc;
 }
 
 /* IDセレクター#nav（ナビゲーション）の要素に適用する */
 #nav {
-    margin: 0 100px;
+    /*display: inline-block;*/
+    float: right;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-#nav button {
-
+.sep {
+    height: 1px;
+    clear: both;
 }
 
-/* IDセレクター#main（メインコンテンツ）の要素に適用する */
-/*#main {*/
-    /*margin: 0 100px;*/
-/*}*/
+button > a {
+    color: #fafafa;
+}
 
 /* クラスセレクターstatusが適用されている要素に適用する */
 .status {
     /*padding: 10px;*/
     border: 2px solid #cccccc;
     margin-bottom: 10px;
-    background-color: #ffffff
+    background-color: #ffffff;
 }
 
 /* クラスセレクターerror_listが適用されているul要素に適用する */

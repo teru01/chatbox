@@ -12,35 +12,42 @@
 </head>
 <body>
 <div id="header">
-    <h1><a href="<?php print $base_url; ?>/"><img src="/images/logo.png" hight="20"></a></h1>
-</div>
-<div id="nav">
-    <p>
-        <?php if($session->isAuthenticated()): ?>
-        <button type="button" class="btn btn-success">
-            <a href="<?php print $base_url; ?>/">
-                トップページ
-            </a>
-        </button>
-        <button type="button" class="btn btn-primary">
-            <a href="<?php print $base_url; ?>/account">
-                アカウント
-            </a>
-        </button>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3">
+                <a href="<?php print $base_url; ?>/"><img src="/images/logo.png"></a>
+            </div>
+            <div class="col-xs-6 col-md-offset-6">
+                <p>
+                    <?php if($session->isAuthenticated()): ?>
+                    <button type="button" class="btn btn-success">
+                        <a href="<?php print $base_url; ?>/">
+                            トップページ
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <a href="<?php print $base_url; ?>/account">
+                            アカウント
+                        </a>
+                    </button>
 
-        <?php else: ?>
-        <button type="button" class="btn btn-primary">
-        <a href="<?php print $base_url; ?>/account/signin">
-            サインイン
-        </a>
-        </button>
-        <button type="button" class="btn btn-primary">
-        <a href="<?php print $base_url; ?>/account/signup">
-            アカウントを作成
-        </a>
-        </button>
-        <?php endif; ?>
-    </p>
+                    <?php else: ?>
+                    <button type="button" class="btn btn-success">
+                    <a href="<?php print $base_url; ?>/account/signin">
+                        サインイン
+                    </a>
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                    <a href="<?php print $base_url; ?>/account/signup">
+                        アカウントを作成
+                    </a>
+                    </button>
+                    <?php endif; ?>
+                </p>
+            </div>
+        </div>
+    </div>
+<!--    <div class="sep"></div>-->
 </div>
 <div class="container">
 <div id="main">
