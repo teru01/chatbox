@@ -16,7 +16,7 @@
     <div id="nav">
         <?php if($session->isAuthenticated()): ?>
         <a href="<?php print $base_url; ?>/" class="btn btn-success">
-                トップページ
+            トップページ
         </a>
         <a href="<?php print $base_url; ?>/account" class="btn btn-primary">
             アカウント

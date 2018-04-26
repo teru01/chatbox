@@ -1,5 +1,5 @@
 <?php $this->setPageTitle('title', 'アカウントを作成') ?>
-<h2>ユーザーアカウントを作成</h2>
+<h1 class="page_title">ユーザーアカウントを作成</h1>
 <div class="container">
 <form action="<?php print $base_url; ?>/account/register" method="post">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">

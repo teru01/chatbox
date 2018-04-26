@@ -1,8 +1,5 @@
 <?php $this->setPageTitle('title', 'サインイン'); ?>
-<h2>サインイン</h2>
-<p>
-    <a href="<?php print $base_url; ?>/account/signup">アカウントを作成</a>
-</p>
+<h1 class="page_title">サインイン</h1>
 <div class="container">
 <form action="<?php print $base_url; ?>/account/authenticate" method="post">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">

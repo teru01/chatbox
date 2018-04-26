@@ -23,7 +23,6 @@ h2,h3 {
 
 /* IDセレクター#nav（ナビゲーション）の要素に適用する */
 #nav {
-    /*display: inline-block;*/
     float: right;
     margin-right: 20px;
     margin-top: 20px;
@@ -37,7 +36,11 @@ h2,h3 {
 
 .btn a {
     color: #fafafa;
+}
 
+.page_title {
+    margin: 20px 0;
+    color: #565656;
 }
 
 
