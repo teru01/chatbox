@@ -1,6 +1,6 @@
 <?php
 $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
-<p>投稿する記事を入力:</p>
+<p>投稿する:</p>
 <form action="<?php print $base_url; ?>/status/post" method="post" class="container">
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
     <?php if(isset($errors) && count($errors)): ?>

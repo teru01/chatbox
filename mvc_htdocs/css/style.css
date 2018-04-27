@@ -40,10 +40,8 @@ h2,h3 {
 
 .page_title {
     margin: 20px 0;
-    color: #565656;
+    color: #606060;
 }
-
-
 
 /* クラスセレクターstatusが適用されている要素に適用する */
 .status {
@@ -67,17 +65,10 @@ ul.error_list li {
 }
 /* クラスセレクターacountが適用されている要素に適用する */
 .acount {
-    float:left;
-    background-color: #ffcccc;
-    padding: 0px 30px 10px 30px;
-    width: 200px;
+
 }
 
 /* クラスセレクターf_userが適用されている要素に適用する */
 .f_user {
-    float:left;
-    background-color: #ffcccc;
-    padding: 0px 30px 10px 30px;
-    margin-left: 60px;
-    width: 200px;
+
 }

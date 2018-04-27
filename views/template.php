@@ -21,6 +21,9 @@
         <a href="<?php print $base_url; ?>/account" class="btn btn-primary">
             アカウント
         </a>
+        <a href="<?php print $base_url; ?>/account/signout" class="btn">
+            サインアウト
+        </a>
 
         <?php else: ?>
         <a href="<?php print $base_url; ?>/account/signin" class="btn btn-success">
