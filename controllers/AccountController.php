@@ -216,41 +216,57 @@ class AccountController extends Controller{
     }
 
     /**
+     * ファイルアップロード時のエラーメッセージを格納する
+     * @return mixed
+     */
+    private function setErrMsg(){
+        $msg = [
+            UPLOAD_ERR_INI_SIZE => 'ファイルサイズが大きすぎます。(php.ini)',
+            UPLOAD_ERR_FORM_SIZE => 'ファイルサイズが大きすぎます。(HTML form error)',
+            UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
+            UPLOAD_ERR_NO_FILE => 'ファイルはアップロードされませんでした。',
+            UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダが存在しません。',
+            UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
+            UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
+        ];
+        return $msg[$_FILES['upload']['error']];
+    }
+
+    /**
      * ユーザーアイコン画像をアップロードする
      */
     public function uploadAction(){
         $allow_types = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF];
         $uploaded_file = $_FILES['upload']['tmp_name'];
+        $user_data = $this->_session->get(self::USER);
 
         if ($_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
-            $msg = array(
-                UPLOAD_ERR_INI_SIZE => 'ファイルサイズが大きすぎます。(php.ini)',
-                UPLOAD_ERR_FORM_SIZE => 'ファイルサイズが大きすぎます。(HTML form error)',
-                UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
-                UPLOAD_ERR_NO_FILE => 'ファイルはアップロードされませんでした。',
-                UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダが存在しません。',
-                UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
-                UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
-            );
-            $err_msg = $msg[$_FILES['upload']['error']];
+            $err_msg = $this->setErrMsg();
 
         } elseif (!in_array(exif_imagetype($uploaded_file), $allow_types)) {
             $err_msg = 'jpeg, png, gifのいずれかをアップロードしてください。';
 
         } else {
-            $user_data = $this->_session->get(self::USER);
-            $img_dest = '/images/user_imgs/' . $user_data[self::USER_NAME] . $_FILES['upload']['name'];
+            $img_location_from_docroot = '/images/user_imgs/'.$user_data[self::USER_NAME].$_FILES['upload']['name'];
+            $img_dest = $_SERVER['DOCUMENT_ROOT'].$img_location_from_docroot;
 
-            if (move_uploaded_file($uploaded_file, $img_dest)) {
+            $upload_result = move_uploaded_file($uploaded_file, $img_dest);
+            if ($upload_result) {
                 $this->_connect_model
+                     ->get(self::USERMODEL_PREF)
+                     ->updateUserImage($user_data[self::ID], $img_location_from_docroot);
+
+                $user_data_with_img = $this->_connect_model
                     ->get(self::USERMODEL_PREF)
-                    ->updateUserImage($user_data[self::ID], $img_dest);
+                    ->getUserRecord($user_data[self::USER_NAME]);
+                $this->_session->set(self::USER, $user_data_with_img);
             }
+
             else{
                 $err_msg = 'アップロード処理に失敗しました。';
             }
         }
 
-        $this->redirect(self::ACCOUNT_PATH, ['errors' => $err_msg]);
+        $this->redirect(self::ACCOUNT_PATH);
     }
 }
