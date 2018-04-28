@@ -1,12 +1,21 @@
 <?php $this->setPageTitle('title', 'アカウント'); ?>
 <div class="acount">
     <h1 class="page_title">アカウント情報</h1>
-    <p>
-        ユーザーID:
+    <div class="user_id_and_image">
+        <div class="user_image">
+            <img src="/images/default_image.jpg">
+            <form method="post" action="<?php print $base_url; ?>/account/upload" enctype="multipart/form-data">
+                <input type="file" name="user_img"><br>
+                <input type="submit" value="アップロード">
+            </form>
+        </div>
+        <div class="user_id">
+        <p>ユーザーID</p>
         <a href="<?php print $base_url; ?>/user/<?php print $this->escape($user['user_name']); ?>">
             <?php print $this->escape($user['user_name']); ?>
         </a>
-    </p>
+        </div>
+    </div>
 </div>
 <div class="f_user">
     <h3 class="sub_title">フォローしているユーザー</h3>

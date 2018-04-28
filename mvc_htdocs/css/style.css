@@ -68,7 +68,32 @@ ul.error_list li {
 
 }
 
+.user_id_and_image {
+    overflow: hidden;
+}
+
+.user_image {
+    width: 300px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.user_id {
+    width: 200px;
+    float: left;
+    font-size: large;
+}
+
+.user_id p a {
+
+}
+
+.user_image form {
+    margin-top: 20px;
+}
+
+
 /* クラスセレクターf_userが適用されている要素に適用する */
 .f_user {
-
+    margin-top: 50px;
 }
