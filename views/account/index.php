@@ -5,7 +5,7 @@
         <div class="user_image">
             <img src="/images/user_imgs/<?php print $this->escape($user['user_img']) ?>">
             <form method="post" action="<?php print $base_url; ?>/account/upload" enctype="multipart/form-data">
-                <input type="file" name="user_img"><br>
+                <input type="file" name="upload"><br>
                 <input type="submit" value="アップロード">
             </form>
             <?php if (isset($errors) && count($errors) > 0){
