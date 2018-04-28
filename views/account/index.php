@@ -3,11 +3,14 @@
     <h1 class="page_title">アカウント情報</h1>
     <div class="user_id_and_image">
         <div class="user_image">
-            <img src="/images/default_image.jpg">
+            <img src="/images/<?php print $this->escape($user['user_img']) ?>">
             <form method="post" action="<?php print $base_url; ?>/account/upload" enctype="multipart/form-data">
                 <input type="file" name="user_img"><br>
                 <input type="submit" value="アップロード">
             </form>
+            <?php if (isset($errors) && count($errors) > 0){
+                print $this->render('errors', ['errors' => $errors]);
+            } ?>
         </div>
         <div class="user_id">
         <p>ユーザーID</p>
