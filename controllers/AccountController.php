@@ -7,6 +7,8 @@ class AccountController extends Controller{
     const USER_NAME = 'user_name';
     const PASSWD = 'password';
     const ACCOUNT_PATH = '/account';
+    const USER_IMG = 'user_img';
+    const DEFAULT_USERIMG = 'default_image.jpg';
 
 
     /**
@@ -15,11 +17,19 @@ class AccountController extends Controller{
      */
     public function indexAction(){
         $user_data = $this->_session->get(self::USER);
+        if(!isset($user_data[self::USER_IMG])){
+            $user_data[self::USER_IMG] = self::DEFAULT_USERIMG;
+        }
+
         $followingUsers = $this
             ->_connect_model
             ->get(self::USERMODEL_PREF)
             ->getFollowingUser($user_data[self::ID]);
-        return $this->render(['user' => $user_data, 'followingUsers' => $followingUsers]);
+
+        return $this->render([
+            'user'           => $user_data,
+            'followingUsers' => $followingUsers
+            ]);
     }
 
     /**
@@ -84,6 +94,7 @@ class AccountController extends Controller{
             $this->_session->set('user', $user);
             $this->redirect('/');
         }
+
         return $this->render([
             self::USER_NAME => $user_name,
             self::PASSWD    => $password,
@@ -204,6 +215,42 @@ class AccountController extends Controller{
         return $this->redirect(self::ACCOUNT_PATH);
     }
 
+    /**
+     * ユーザーアイコン画像をアップロードする
+     */
+    public function uploadAction(){
+        $allow_types = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF];
+        $uploaded_file = $_FILES['upload']['tmp_name'];
 
+        if ($_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
+            $msg = array(
+                UPLOAD_ERR_INI_SIZE => 'ファイルサイズが大きすぎます。(php.ini)',
+                UPLOAD_ERR_FORM_SIZE => 'ファイルサイズが大きすぎます。(HTML form error)',
+                UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
+                UPLOAD_ERR_NO_FILE => 'ファイルはアップロードされませんでした。',
+                UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダが存在しません。',
+                UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
+                UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
+            );
+            $err_msg = $msg[$_FILES['upload']['error']];
 
+        } elseif (!in_array(exif_imagetype($uploaded_file), $allow_types)) {
+            $err_msg = 'jpeg, png, gifのいずれかをアップロードしてください。';
+
+        } else {
+            $user_data = $this->_session->get(self::USER);
+            $img_dest = '/images/user_imgs/' . $user_data[self::USER_NAME] . $_FILES['upload']['name'];
+
+            if (move_uploaded_file($uploaded_file, $img_dest)) {
+                $this->_connect_model
+                    ->get(self::USERMODEL_PREF)
+                    ->updateUserImage($user_data[self::ID], $img_dest);
+            }
+            else{
+                $err_msg = 'アップロード処理に失敗しました。';
+            }
+        }
+
+        $this->redirect(self::ACCOUNT_PATH, ['errors' => $err_msg]);
+    }
 }
