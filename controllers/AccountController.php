@@ -17,6 +17,7 @@ class AccountController extends Controller{
      */
     public function indexAction(){
         $user_data = $this->_session->get(self::USER);
+        $errors = $this->_session->get('errors');
         if(!isset($user_data[self::USER_IMG])){
             $user_data[self::USER_IMG] = self::DEFAULT_USERIMG;
         }
@@ -28,7 +29,8 @@ class AccountController extends Controller{
 
         return $this->render([
             'user'           => $user_data,
-            'followingUsers' => $followingUsers
+            'followingUsers' => $followingUsers,
+            'errors'         => $errors
             ]);
     }
 
@@ -239,7 +241,7 @@ class AccountController extends Controller{
         $allow_types = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF];
         $uploaded_file = $_FILES['upload']['tmp_name'];
         $user_data = $this->_session->get(self::USER);
-
+        $err_msg = '';
         if ($_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
             $err_msg = $this->setErrMsg();
 
@@ -260,12 +262,15 @@ class AccountController extends Controller{
                     ->get(self::USERMODEL_PREF)
                     ->getUserRecord($user_data[self::USER_NAME]);
                 $this->_session->set(self::USER, $user_data_with_img);
+                
             }
 
             else{
                 $err_msg = 'アップロード処理に失敗しました。';
             }
         }
+
+        $this->_session->set('errors', $err_msg ? [$err_msg] : null);
 
         $this->redirect(self::ACCOUNT_PATH);
     }
