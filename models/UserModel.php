@@ -55,4 +55,16 @@ class UserModel extends ExecuteModel{
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
 
+    /**
+     * ユーザーのアイコン画像URLをアップデートする
+     * @param int $user_id
+     * @param string $img_path
+     */
+    public function updateUserImage(int $user_id, string $img_path){
+        $sql = "UPDATE  user
+                SET     user_img = :img_path
+                WHERE   id = :user_id";
+        $this->execute($sql, [':img_path' => $img_path, ':user_id' => $user_id]);
+    }
+
 }
