@@ -235,6 +235,22 @@ class AccountController extends Controller{
     }
 
     /**
+     * ユーザのレコードとセッション情報を更新する
+     * @param $user_data
+     * @param $img_location
+     */
+    private function updateUserData($user_data, $img_location){
+        $this->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->updateUserImage($user_data[self::ID], $img_location);
+
+        $user_data_with_img = $this->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->getUserRecord($user_data[self::USER_NAME]);
+        $this->_session->set(self::USER, $user_data_with_img);
+    }
+
+    /**
      * ユーザーアイコン画像をアップロードする
      */
     public function uploadAction(){
@@ -252,17 +268,8 @@ class AccountController extends Controller{
             $img_location_from_docroot = '/images/user_imgs/'.$user_data[self::USER_NAME].$_FILES['upload']['name'];
             $img_dest = $_SERVER['DOCUMENT_ROOT'].$img_location_from_docroot;
 
-            $upload_result = move_uploaded_file($uploaded_file, $img_dest);
-            if ($upload_result) {
-                $this->_connect_model
-                     ->get(self::USERMODEL_PREF)
-                     ->updateUserImage($user_data[self::ID], $img_location_from_docroot);
-
-                $user_data_with_img = $this->_connect_model
-                    ->get(self::USERMODEL_PREF)
-                    ->getUserRecord($user_data[self::USER_NAME]);
-                $this->_session->set(self::USER, $user_data_with_img);
-                
+            if (move_uploaded_file($uploaded_file, $img_dest)) {
+                $this->updateUserData($user_data, $img_location_from_docroot);
             }
 
             else{
