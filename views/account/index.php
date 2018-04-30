@@ -8,9 +8,7 @@
                 <input type="file" name="upload"><br>
                 <input type="submit" value="アップロード">
             </form>
-            <?php if (isset($errors) && count($errors) > 0){
-                print $this->render('errors', ['errors' => $errors]);
-            } ?>
+
         </div>
         <div class="user_id">
         <p>ユーザーID</p>
@@ -18,6 +16,10 @@
             <?php print $this->escape($user['user_name']); ?>
         </a>
         </div>
+        <div class="sep"></div>
+        <?php if (isset($errors) && count($errors) > 0){
+            print $this->render('errors', ['errors' => $errors]);
+        } ?>
     </div>
 </div>
 <div class="f_user">
