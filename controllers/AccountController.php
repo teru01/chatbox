@@ -265,10 +265,16 @@ class AccountController extends Controller{
             $err_msg = 'jpeg, png, gifのいずれかをアップロードしてください。';
 
         } else {
+            list($width, $height) = getimagesize($uploaded_file);
+            $thumb_wid = 100;
+            $thumb_hei = 100;
+            $thumbnail = imagecreatetruecolor($thumb_wid, $thumb_hei);
+            $base_img = imagecreatefromjpeg($uploaded_file);
+            imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0, $thumb_wid, $thumb_hei, $width, $height);
             $img_location_from_docroot = '/images/user_imgs/'.$user_data[self::USER_NAME].$_FILES['upload']['name'];
             $img_dest = $_SERVER['DOCUMENT_ROOT'].$img_location_from_docroot;
 
-            if (move_uploaded_file($uploaded_file, $img_dest)) {
+            if (imagejpeg($thumbnail, $img_dest, 60)) {
                 $this->updateUserData($user_data, $img_location_from_docroot);
             }
 
