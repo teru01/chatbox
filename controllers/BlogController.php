@@ -13,12 +13,13 @@ class BlogController extends Controller {
      */
     public function indexAction() {
         $user = $this->_session->get(self::USER);
-        $user_data = $this->_connect_model
+        $posted_data = $this->_connect_model
                      ->get(self::STATUSMODEL_PREF)
                      ->getUserData($user[self::ID]);
 
         $index_view = $this->render([
-            self::STATUSES => $user_data,
+            self::USER     => $user,
+            self::STATUSES => $posted_data,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST)
         ]);

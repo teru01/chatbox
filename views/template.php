@@ -15,23 +15,22 @@
     <a href="<?php print $base_url; ?>/"><img src="/images/logo.png"></a>
     <div id="nav">
         <?php if($session->isAuthenticated()): ?>
-        <a href="<?php print $base_url; ?>/" class="btn btn-success">
-            トップページ
-        </a>
-        <a href="<?php print $base_url; ?>/account" class="btn btn-primary">
-            アカウント
-        </a>
-        <a href="<?php print $base_url; ?>/account/signout" class="btn">
-            サインアウト
-        </a>
-
+            <a href="<?php print $base_url; ?>/" class="btn btn-success">
+                トップページ
+            </a>
+            <a href="<?php print $base_url; ?>/account" class="btn btn-primary">
+                アカウント
+            </a>
+            <a href="<?php print $base_url; ?>/account/signout" class="btn">
+                サインアウト
+            </a>
         <?php else: ?>
-        <a href="<?php print $base_url; ?>/account/signin" class="btn btn-success">
-            サインイン
-        </a>
-        <a href="<?php print $base_url; ?>/account/signup" class="btn btn-primary">
-            アカウントを作成
-        </a>
+            <a href="<?php print $base_url; ?>/account/signin" class="btn btn-success">
+                サインイン
+            </a>
+            <a href="<?php print $base_url; ?>/account/signup" class="btn btn-primary">
+                アカウントを作成
+            </a>
         <?php endif; ?>
     </div>
 </div>
