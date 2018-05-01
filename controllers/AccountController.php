@@ -217,29 +217,13 @@ class AccountController extends Controller{
         return $this->redirect(self::ACCOUNT_PATH);
     }
 
-    /**
-     * ファイルアップロード時のエラーメッセージを格納する
-     * @return mixed
-     */
-    private function setErrMsg(){
-        $msg = [
-            UPLOAD_ERR_INI_SIZE => 'ファイルサイズが大きすぎます。(php.ini)',
-            UPLOAD_ERR_FORM_SIZE => 'ファイルサイズが大きすぎます。(HTML form error)',
-            UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
-            UPLOAD_ERR_NO_FILE => 'ファイルはアップロードされませんでした。',
-            UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダが存在しません。',
-            UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
-            UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
-        ];
-        return $msg[$_FILES['upload']['error']];
-    }
 
     /**
      * ユーザのレコードとセッション情報を更新する
-     * @param $user_data
-     * @param $img_location
+     * @param array $user_data
+     * @param string $img_location
      */
-    private function updateUserData($user_data, $img_location){
+    private function updateUserData(array $user_data, string $img_location){
         $this->_connect_model
             ->get(self::USERMODEL_PREF)
             ->updateUserImage($user_data[self::ID], $img_location);
@@ -251,40 +235,91 @@ class AccountController extends Controller{
     }
 
     /**
+     * エラーメッセージを格納する
+     * @param string $err_msg
+     */
+    private function setErrMsg(?string $err_msg){
+        $this->_session->set('errors', $err_msg ? [$err_msg] : null);
+    }
+
+
+    /**
      * ユーザーアイコン画像をアップロードする
      */
     public function uploadAction(){
-        $allow_types = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF];
         $uploaded_file = $_FILES['upload']['tmp_name'];
         $user_data = $this->_session->get(self::USER);
-        $err_msg = '';
+
+        $this->setErrMsg(null);
         if ($_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
-            $err_msg = $this->setErrMsg();
-
-        } elseif (!in_array(exif_imagetype($uploaded_file), $allow_types)) {
-            $err_msg = 'jpeg, png, gifのいずれかをアップロードしてください。';
-
-        } else {
-            list($width, $height) = getimagesize($uploaded_file);
-            $thumb_wid = 100;
-            $thumb_hei = 100;
-            $thumbnail = imagecreatetruecolor($thumb_wid, $thumb_hei);
-            $base_img = imagecreatefromjpeg($uploaded_file);
-            imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0, $thumb_wid, $thumb_hei, $width, $height);
-            $img_location_from_docroot = '/images/user_imgs/'.$user_data[self::USER_NAME].$_FILES['upload']['name'];
-            $img_dest = $_SERVER['DOCUMENT_ROOT'].$img_location_from_docroot;
-
-            if (imagejpeg($thumbnail, $img_dest, 60)) {
-                $this->updateUserData($user_data, $img_location_from_docroot);
-            }
-
-            else{
-                $err_msg = 'アップロード処理に失敗しました。';
-            }
+            $msg = [
+                UPLOAD_ERR_INI_SIZE => 'ファイルサイズが大きすぎます。(php.ini)',
+                UPLOAD_ERR_FORM_SIZE => 'ファイルサイズが大きすぎます。(HTML form error)',
+                UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
+                UPLOAD_ERR_NO_FILE => 'ファイルはアップロードされませんでした。',
+                UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダが存在しません。',
+                UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
+                UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
+            ];
+            $this->setErrMsg($msg[$_FILES['upload']['error']]);
+            $this->redirect(self::ACCOUNT_PATH);
         }
 
-        $this->_session->set('errors', $err_msg ? [$err_msg] : null);
+        $img_location_from_docroot = '/images/user_imgs/'.$user_data[self::USER_NAME].$_FILES['upload']['name'];
+        $img_dest = $_SERVER['DOCUMENT_ROOT'].$img_location_from_docroot;
 
-        $this->redirect(self::ACCOUNT_PATH);
+        /*黒塗り画像を作成*/
+        list($width, $height) = getimagesize($uploaded_file);
+        $thumb_wid = 100;
+        $thumb_hei = 100;
+        $thumbnail = imagecreatetruecolor($thumb_wid, $thumb_hei);
+
+        /*アップロードされたファイルから画像を生成*/
+        $image_type = exif_imagetype($uploaded_file);
+        switch ($image_type){
+            //case内をメソッドに切り出したほうがいいかも
+            case IMAGETYPE_JPEG:
+                $base_img = imagecreatefromjpeg($uploaded_file);
+                imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0,
+                    $thumb_wid, $thumb_hei, $width, $height);
+
+                if (imagejpeg($thumbnail, $img_dest, 60)) {
+                    $this->updateUserData($user_data, $img_location_from_docroot);
+                }else{
+                    $this->setErrMsg('アップロード処理に失敗しました。');
+                }
+                $this->redirect(self::ACCOUNT_PATH);
+                break;
+
+            case IMAGETYPE_PNG:
+                $base_img = imagecreatefrompng($uploaded_file);
+                imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0,
+                    $thumb_wid, $thumb_hei, $width, $height);
+
+                if (imagepng($thumbnail, $img_dest)) {
+                    $this->updateUserData($user_data, $img_location_from_docroot);
+                }else{
+                    $this->setErrMsg('アップロード処理に失敗しました。');
+                }
+                $this->redirect(self::ACCOUNT_PATH);
+                break;
+
+            case IMAGETYPE_GIF:
+                $base_img = imagecreatefromgif($uploaded_file);
+                imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0,
+                    $thumb_wid, $thumb_hei, $width, $height);
+
+                if (imagegif($thumbnail, $img_dest)) {
+                    $this->updateUserData($user_data, $img_location_from_docroot);
+                }else{
+                    $this->setErrMsg('アップロード処理に失敗しました。');
+                }
+                $this->redirect(self::ACCOUNT_PATH);
+                break;
+
+            default:
+                $this->setErrMsg('jpeg, png, gifのいずれかをアップロードしてください。');
+                $this->redirect(self::ACCOUNT_PATH);
+        }
     }
 }
