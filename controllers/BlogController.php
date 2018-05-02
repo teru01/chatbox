@@ -11,7 +11,7 @@ class BlogController extends Controller {
      * ユーザー専用ページを発行するアクションメソッド
      * @return string
      */
-    public function indexAction() {
+    public function indexAction():string {
         $user = $this->_session->get(self::USER);
         $posted_data = $this->_connect_model
                      ->get(self::STATUSMODEL_PREF)
@@ -28,10 +28,10 @@ class BlogController extends Controller {
 
     /**
      * フォームから投稿された記事をDBに登録する
-     * @return string|void
+     * @return null|string
      * @throws FileNotFoundException
      */
-    public function postAction(){
+    public function postAction(): ?string {
         if(!$this->_request->isPost()){
             $this->httpNotFound();
         }
@@ -71,7 +71,7 @@ class BlogController extends Controller {
      * @return string
      * @throws FileNotFoundException
      */
-    public function userAction($par){
+    public function userAction($par):string {
         $user_data = $this
             ->_connect_model
             ->get(self::USERMODEL_PREF)
@@ -111,7 +111,7 @@ class BlogController extends Controller {
      * @return string
      * @throws FileNotFoundException
      */
-    public function specificAction($par){
+    public function specificAction($par):string {
         $posted_data = $this
             ->_connect_model
             ->get(self::STATUSMODEL_PREF)

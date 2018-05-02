@@ -16,11 +16,11 @@ class AccountController extends Controller{
      * ユーザーアカウント情報を発行するアクションメソッド
      * @return string
      */
-    public function indexAction(){
+    public function indexAction(): string {
         $user_data = $this->_session->get(self::USER);
         $errors = $this->_session->get('errors');
         if(!isset($user_data[self::USER_IMG])){
-            $user_data[self::USER_IMG] = self::DEFAULT_USERIMG;
+            $user_data[self::USER_IMG] = self::USERIMAGE_ROOT.self::DEFAULT_USERIMG;
         }
 
         $followingUsers = $this
@@ -39,7 +39,7 @@ class AccountController extends Controller{
      * アカウント登録画面を発行するアクションメソッド
      * @return string
      */
-    public function signupAction(){
+    public function signupAction(): string {
         if($this->_session->isAuthenticated()){
             $this->redirect(self::ACCOUNT_PATH);
         }
@@ -54,10 +54,10 @@ class AccountController extends Controller{
 
     /**
      * アカウントの登録を行うアクションメソッド
-     * @return string|void
+     * @return null|string
      * @throws FileNotFoundException
      */
-    public function registerAction(){
+    public function registerAction():?string {
 
         if(!$this->_request->isPost()){
             $this->httpNotFound();
@@ -111,7 +111,7 @@ class AccountController extends Controller{
      * サインイン用の画面を発行する
      * @return string
      */
-    public function signinAction(){
+    public function signinAction(): string {
         if($this->_session->isAuthenticated()){
             $this->redirect(self::ACCOUNT_PATH);
         }
@@ -125,10 +125,10 @@ class AccountController extends Controller{
 
     /**
      * ログイン画面から送られた認証情報を元にサインイン処理をする
-     * @return string|void
+     * @return null|string
      * @throws FileNotFoundException
      */
-    public function authenticateAction(){
+    public function authenticateAction(): ?string {
         if($this->_session->isAuthenticated()){
             $this->redirect(self::ACCOUNT_PATH);
         }
@@ -244,7 +244,7 @@ class AccountController extends Controller{
      * @param string $img_location_from_docroot
      * @return bool
      */
-    private function uploadImageWithResizing(string $uploaded_file, string $img_location_from_docroot){
+    private function uploadImageWithResizing(string $uploaded_file, string $img_location_from_docroot): ?bool{
         /*黒塗り画像を作成*/
         list($width, $height) = getimagesize($uploaded_file);
         $thumb_wid = 100;
