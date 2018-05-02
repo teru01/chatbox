@@ -315,7 +315,8 @@ class AccountController extends Controller{
             $this->redirect(self::ACCOUNT_PATH);
         }
 
-        $img_location_from_docroot = self::USERIMAGE_ROOT.$user_data[self::USER_NAME].$_FILES['upload']['name'];
+        $hashed_filename = hash("sha256", $_FILES['upload']['name']);
+        $img_location_from_docroot = self::USERIMAGE_ROOT.$hashed_filename;
         $did_succeeded = $this->uploadImageWithResizing($uploaded_file_name, $img_location_from_docroot);
 
         if($did_succeeded){
