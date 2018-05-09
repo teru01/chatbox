@@ -1,14 +1,14 @@
 <?php
-class StatusModel extends ExecuteModel {
+class ArticleModel extends ExecuteModel {
 
     /**
-     * statusテーブルに投稿情報を追加する
+     * articleテーブルに投稿情報を追加する
      * @param int $user_id
      * @param string $message
      */
     public function insert(int $user_id, string $message){
         $now = new DateTime();
-        $sql = "INSERT INTO status(user_id, message, time_stamp) VALUES(:user_id, :message, :time_stamp)";
+        $sql = "INSERT INTO article(user_id, message, time_stamp) VALUES(:user_id, :message, :time_stamp)";
         $this->execute($sql, [
             ':user_id'    => $user_id,
             ':message'    => $message,
@@ -23,8 +23,8 @@ class StatusModel extends ExecuteModel {
      */
     public function getUserData(int $user_id){
         $sql = "SELECT st.*, us.user_name
-                FROM   status st LEFT JOIN user us ON st.user_id = us.id
-                                 LEFT JOIN followingUser f ON f.following_id = st.user_id
+                FROM   article st LEFT JOIN user us ON st.user_id = us.id
+                                 LEFT JOIN following_user f ON f.following_id = st.user_id
                                                            AND f.user_id = :user_id
                 WHERE  f.user_id = :user_id OR us.id = :user_id
                 ORDER BY st.time_stamp DESC";
@@ -38,7 +38,7 @@ class StatusModel extends ExecuteModel {
      */
     public function getPostedMessage(int $user_id){
         $sql = "SELECT st.*, u.user_name
-                FROM status st LEFT JOIN user u ON st.user_id = u.id
+                FROM article st LEFT JOIN user u ON st.user_id = u.id
                 WHERE u.id = :user_id
                 ORDER BY st.time_stamp DESC";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
@@ -46,15 +46,15 @@ class StatusModel extends ExecuteModel {
 
     /**
      * 渡された記事IDとユーザ名に一致する記事をDBから取得し返す
-     * @param int $status_id
+     * @param int $article_id
      * @param string $user_name
      * @return mixed
      */
-    public function getSpecificMessage(int $status_id, string $user_name){
+    public function getSpecificMessage(int $article_id, string $user_name){
         $sql = "SELECT st.*, u.user_name
-                FROM status st LEFT JOIN user u ON st.user_id = u.id
-                WHERE st.id = :status_id AND u.user_name = :user_name";
-        return $this->getRecord($sql, [':status_id' => $status_id, ':user_name' => $user_name]);
+                FROM article st LEFT JOIN user u ON st.user_id = u.id
+                WHERE st.id = :article_id AND u.user_name = :user_name";
+        return $this->getRecord($sql, [':article_id' => $article_id, ':user_name' => $user_name]);
     }
 
 

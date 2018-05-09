@@ -1,4 +1,4 @@
 <?php
-$this->setPageTitle('title', $status['user_name']);
-print $this->render('blog/status', ['status' => $status]);
+$this->setPageTitle('title', $article['user_name']);
+print $this->render('blog/article', ['article' => $article]);
 

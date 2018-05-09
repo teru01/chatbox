@@ -11,8 +11,8 @@
 </form>
 <?php endif; ?>
 <?php endif; ?>
-<div id="statuses">
-    <?php foreach ($statuses as $status): ?>
-    <?php print $this->render('blog/status', ['status' => $status]); ?>
+<div id="articles">
+    <?php foreach ($articles as $article): ?>
+    <?php print $this->render('blog/article', ['article' => $article]); ?>
     <?php endforeach; ?>
 </div>

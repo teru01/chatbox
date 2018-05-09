@@ -10,7 +10,7 @@ abstract class Controller{
     protected $_authentication = [];
     const PROTOCOL = 'http://';
     const ACTION = 'Action';
-    const STATUSMODEL_PREF = 'Status';
+    const ARTICLEMODEL_PREF = 'Article';
     const USERMODEL_PREF = 'User';
     const FollowingModel_PREF = 'Following';
     const USER = 'user';

@@ -50,7 +50,7 @@ class UserModel extends ExecuteModel{
     public function getFollowingUser(int $user_id){
         $sql = "SELECT    u.*
                 FROM      user u
-                LEFT JOIN followingUser f ON f.following_id = u.id
+                LEFT JOIN following_user f ON f.following_id = u.id
                 WHERE     f.user_id = :user_id";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }

@@ -8,7 +8,7 @@ class BlogApp extends AppBase{
      */
     protected function doDbConnection(){
         $this->_connectModel->connect('master', [
-            'string'   =>  'mysql:dbname=weblog;host=localhost; charset=utf8',
+            'string'   =>  'mysql:dbname=chatbox;host=localhost; charset=utf8',
             'user'     =>  MYSQL_USER,
             'password' =>  MYSQL_PASS,
         ]);
@@ -31,13 +31,13 @@ class BlogApp extends AppBase{
             '/'
                 => ['controller' => 'blog',
                     'action'     => 'index'],
-            '/status/post'
+            '/article/post'
                 => ['controller' => 'blog',
                     'action'     => 'post'],
             'user/:user_name'
                 => ['controller' => 'blog',
                     'action'     => 'user'],
-            'user/:user_name/status/:id'
+            'user/:user_name/article/:id'
                 => ['controller' => 'blog',
                     'action'     => 'specific'],
         ];

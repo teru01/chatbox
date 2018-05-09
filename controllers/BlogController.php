@@ -1,8 +1,8 @@
 <?php
 class BlogController extends Controller {
-    const STATUSES = 'statuses';
+    const ARTICLES = 'articles';
     const MESSAGE = 'message';
-    const POST = 'status/post';
+    const POST = 'article/post';
     const FOLLOW = 'account/follow';
     protected $_authentication = ['index', 'post'];
 
@@ -14,12 +14,12 @@ class BlogController extends Controller {
     public function indexAction():string {
         $user = $this->_session->get(self::USER);
         $posted_data = $this->_connect_model
-                     ->get(self::STATUSMODEL_PREF)
+                     ->get(self::ARTICLEMODEL_PREF)
                      ->getUserData($user[self::ID]);
 
         $index_view = $this->render([
             self::USER     => $user,
-            self::STATUSES => $posted_data,
+            self::ARTICLES => $posted_data,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST)
         ]);
@@ -51,16 +51,16 @@ class BlogController extends Controller {
 
         if(count($errors) === 0){
             $user = $this->_session->get(self::USER);
-            $this->_connect_model->get(self::STATUSMODEL_PREF)->insert($user[self::ID], $message);
+            $this->_connect_model->get(self::ARTICLEMODEL_PREF)->insert($user[self::ID], $message);
             return $this->redirect('/');
         }
 
         $user = $this->_session->get(self::USER);
-        $post_data = $this->_connect_model->get(self::STATUSMODEL_PREF)->getUserData($user[self::ID]);
+        $post_data = $this->_connect_model->get(self::ARTICLEMODEL_PREF)->getUserData($user[self::ID]);
         return $this->render([
             'errors' => $errors,
             self::MESSAGE => $message,
-            self::STATUSES => $post_data,
+            self::ARTICLES => $post_data,
             self::TOKEN => $this->getToken(self::POST)
         ], 'index');
     }
@@ -83,7 +83,7 @@ class BlogController extends Controller {
 
         $posted_data = $this
             ->_connect_model
-            ->get(self::STATUSMODEL_PREF)
+            ->get(self::ARTICLEMODEL_PREF)
             ->getPostedMessage($user_data[self::ID]);
 
         $following = null;
@@ -99,7 +99,7 @@ class BlogController extends Controller {
 
         return $this->render([
             self::USER => $user_data,
-            self::STATUSES => $posted_data,
+            self::ARTICLES => $posted_data,
             'following' => $following,
             self::TOKEN => $this->getToken(self::FOLLOW),
         ]);
@@ -114,14 +114,14 @@ class BlogController extends Controller {
     public function specificAction($par):string {
         $posted_data = $this
             ->_connect_model
-            ->get(self::STATUSMODEL_PREF)
+            ->get(self::ARTICLEMODEL_PREF)
             ->getSpecificMessage($par[self::ID], $par['user_name']);
 
         if(!$posted_data) {
             $this->httpNotFound();
         }
 
-        return $this->render(['status' => $posted_data]);
+        return $this->render(['article' => $posted_data]);
     }
 
 
