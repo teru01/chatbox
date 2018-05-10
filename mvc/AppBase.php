@@ -12,7 +12,7 @@ abstract class AppBase
     const CONTROLLER = 'Controller';
     const VIEWDIR = '/views';
     const MODELSDIR = '/models';
-    const WEBDIR = '/mvc_htdocs';
+    const WEBDIR = '/mvc_docroot';
     const CONTROLLERSDIR = '/controllers';
     const NOTFOUNDMSG = 'FILE NOT FOUND.';
 

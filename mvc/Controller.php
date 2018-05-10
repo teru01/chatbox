@@ -108,7 +108,7 @@ abstract class Controller{
         $host = $this->_request->getHostName();
         $base_url = $this->_request->getBaseUrl();
         $url = self::PROTOCOL . $host . $base_url . $url;
-        $this->_response->setStatusCode(302, 'Found');
+        $this->_response->setStatusCode(302);
         $this->_response->setHeader('Location', $url);
     }
 

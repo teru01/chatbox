@@ -5,7 +5,7 @@ $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
     <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
     <?php if(isset($errors) && count($errors)): ?>
     <?php print $this->render('errors', ['errors' => $errors]); ?>
-    <?endif; ?>
+    <?php endif; ?>
     <textarea name="message" rows="4" cols="70" class="container"><?php print $this->escape($message); ?></textarea>
     <p><input type="submit" value="投稿"></p>
 </form>
