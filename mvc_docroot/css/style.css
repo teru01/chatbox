@@ -43,8 +43,8 @@ h2,h3 {
     color: #606060;
 }
 
-/* クラスセレクターstatusが適用されている要素に適用する */
-.status {
+/* クラスセレクターarticleが適用されている要素に適用する */
+.article {
     /*padding: 10px;*/
     border: 2px solid #cccccc;
     margin-bottom: 10px;

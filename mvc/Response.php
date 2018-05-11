@@ -2,7 +2,6 @@
 class Response{
     protected $_content;
     protected $_statusCode = 200;
-    protected $_statusMsg = 'OK';
     protected $_headers = [];
     const HTTP = 'HTTP/1.1';
 
@@ -15,11 +14,10 @@ class Response{
 
     /**
      * @param int $statusCode
-     * @param string $msg
+     *
      */
-    public function setStatusCode(int $statusCode, string $msg = ''){
+    public function setStatusCode(int $statusCode){
         $this->_statusCode = $statusCode;
-        $this->_statusMsg = $msg;
     }
 
     /**
@@ -34,7 +32,7 @@ class Response{
      * コンテンツをヘッダとともに出力する。
      */
     public function send(){
-        header(self::HTTP . $this->_statusCode . ' ' . $this->_statusMsg);
+        header(self::HTTP . $this->_statusCode);
         foreach($this->_headers as $name => $value){
             header($name . ': ' . $value);
         }
