@@ -19,13 +19,11 @@ class BlogController extends Controller {
                      ->get(self::ARTICLEMODEL_PREF)
                      ->fetchAllPostedData($user[self::ID]);
 
-        foreach($posted_data as &$article){
-            $article["reaction"] = $this->_connect_model
-                                        ->get(self::REACTIONTAGMODEL_PREF)
-                                        ->selectAllReaction($article[self::ID]);
+        foreach($posted_data as $key => $val){
+            $posted_data[$key]["reaction"] = $this->_connect_model
+                                                  ->get(self::REACTIONTAGMODEL_PREF)
+                                                  ->selectAllReaction($val[self::ID]);
         }
-        unset($article);
-
         $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
         
         $index_view = $this->render([
