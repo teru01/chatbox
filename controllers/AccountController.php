@@ -31,7 +31,7 @@ class AccountController extends Controller{
         return $this->render([
             'user'           => $user_data,
             'followingUsers' => $followingUsers,
-            'errors'         => $errors
+            'errors'         => $errors,
             ]);
     }
 

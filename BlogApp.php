@@ -40,6 +40,9 @@ class BlogApp extends AppBase{
             'user/:user_name/article/:id'
                 => ['controller' => 'blog',
                     'action'     => 'specific'],
+            'article/:id/:reaction_id'
+                => ['controller' => 'blog',
+                    'action'     => 'react'],
         ];
     }
 

@@ -21,13 +21,14 @@ class ArticleModel extends ExecuteModel {
      * @param int $user_id
      * @return mixed
      */
-    public function getUserData(int $user_id){
-        $sql = "SELECT st.*, us.user_name
-                FROM   article st LEFT JOIN user us ON st.user_id = us.id
-                                 LEFT JOIN following_user f ON f.following_id = st.user_id
-                                                           AND f.user_id = :user_id
+    public function fetchAllPostedData(int $user_id){
+        $sql = "SELECT art.*, us.user_name
+                FROM   article AS art
+                LEFT JOIN user AS us ON art.user_id = us.id                 
+                LEFT JOIN following_user AS f ON f.following_id = art.user_id
+                                                  AND f.user_id = :user_id
                 WHERE  f.user_id = :user_id OR us.id = :user_id
-                ORDER BY st.time_stamp DESC";
+                ORDER BY art.time_stamp DESC";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
 
@@ -36,11 +37,11 @@ class ArticleModel extends ExecuteModel {
      * @param int $user_id
      * @return mixed
      */
-    public function getPostedMessage(int $user_id){
-        $sql = "SELECT st.*, u.user_name
-                FROM article st LEFT JOIN user u ON st.user_id = u.id
+    public function fetchPostedMessage(int $user_id){
+        $sql = "SELECT art.*, u.user_name
+                FROM article art LEFT JOIN user u ON art.user_id = u.id
                 WHERE u.id = :user_id
-                ORDER BY st.time_stamp DESC";
+                ORDER BY art.time_stamp DESC";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
 
@@ -50,10 +51,10 @@ class ArticleModel extends ExecuteModel {
      * @param string $user_name
      * @return mixed
      */
-    public function getSpecificMessage(int $article_id, string $user_name){
-        $sql = "SELECT st.*, u.user_name
-                FROM article st LEFT JOIN user u ON st.user_id = u.id
-                WHERE st.id = :article_id AND u.user_name = :user_name";
+    public function fetchSpecificMessage(int $article_id, string $user_name){
+        $sql = "SELECT art.*, u.user_name
+                FROM article art LEFT JOIN user u ON art.user_id = u.id
+                WHERE art.id = :article_id AND u.user_name = :user_name";
         return $this->getRecord($sql, [':article_id' => $article_id, ':user_name' => $user_name]);
     }
 

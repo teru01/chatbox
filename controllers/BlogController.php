@@ -4,7 +4,9 @@ class BlogController extends Controller {
     const MESSAGE = 'message';
     const POST = 'article/post';
     const FOLLOW = 'account/follow';
+    const REACTIONTAGMODEL_PREF = 'Reaction_tag';
     protected $_authentication = ['index', 'post'];
+
 
 
     /**
@@ -15,13 +17,24 @@ class BlogController extends Controller {
         $user = $this->_session->get(self::USER);
         $posted_data = $this->_connect_model
                      ->get(self::ARTICLEMODEL_PREF)
-                     ->getUserData($user[self::ID]);
+                     ->fetchAllPostedData($user[self::ID]);
 
+        foreach($posted_data as &$article){
+            $article["reaction"] = $this->_connect_model
+                                        ->get(self::REACTIONTAGMODEL_PREF)
+                                        ->selectAllReaction($article[self::ID]);
+        }
+        unset($article);
+
+        $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
+        
         $index_view = $this->render([
             self::USER     => $user,
             self::ARTICLES => $posted_data,
             self::MESSAGE  => '',
-            self::TOKEN    => $this->getToken(self::POST)
+            self::TOKEN    => $this->getToken(self::POST),
+            'reactions'    => $reactions,
+
         ]);
         return $index_view;
     }
@@ -56,7 +69,7 @@ class BlogController extends Controller {
         }
 
         $user = $this->_session->get(self::USER);
-        $post_data = $this->_connect_model->get(self::ARTICLEMODEL_PREF)->getUserData($user[self::ID]);
+        $post_data = $this->_connect_model->get(self::ARTICLEMODEL_PREF)->fetchAllPostedData($user[self::ID]);
         return $this->render([
             'errors' => $errors,
             self::MESSAGE => $message,
@@ -67,11 +80,11 @@ class BlogController extends Controller {
 
     /**
      * 特定ユーザーの全ての投稿とフォローボタンを発行する
-     * @param $par
+     * @param array $par
      * @return string
      * @throws FileNotFoundException
      */
-    public function userAction($par):string {
+    public function userAction(array $par):string {
         $user_data = $this
             ->_connect_model
             ->get(self::USERMODEL_PREF)
@@ -84,7 +97,7 @@ class BlogController extends Controller {
         $posted_data = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
-            ->getPostedMessage($user_data[self::ID]);
+            ->fetchPostedMessage($user_data[self::ID]);
 
         $following = null;
         if($this->_session->isAuthenticated()){
@@ -107,15 +120,15 @@ class BlogController extends Controller {
 
     /**
      * 特定の1記事を発行する
-     * @param $par
+     * @param array $par
      * @return string
      * @throws FileNotFoundException
      */
-    public function specificAction($par):string {
+    public function specificAction(array $par):string {
         $posted_data = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
-            ->getSpecificMessage($par[self::ID], $par['user_name']);
+            ->fetchSpecificMessage($par[self::ID], $par['user_name']);
 
         if(!$posted_data) {
             $this->httpNotFound();
@@ -124,5 +137,16 @@ class BlogController extends Controller {
         return $this->render(['article' => $posted_data]);
     }
 
+    public function reactAction($par) {
+        if(!$this->_request->isPost()){
+            $this->httpNotFound();
+        }
+
+        $this->_connect_model
+             ->get(self::REACTIONTAGMODEL_PREF)
+             ->doReaction($par[self::ID], $par['reaction_id']);
+
+        $this->redirect('index');
+    }
 
 }
