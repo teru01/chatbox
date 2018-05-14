@@ -23,11 +23,41 @@ class ReactionTagModel extends ExecuteModel {
      * @param int $article_id
      * @return array|null
      */
-    public function computeAllReaction(int $article_id) {
+    public function computeAllReaction(int $article_id):?array {
         $sql = "SELECT reaction_id, COUNT(*)
                 FROM reaction_tag
                 WHERE article_id = :article_id
                 GROUP BY reaction_id";
         return $this->getAllRecord($sql, [':article_id' => $article_id]);
+    }
+
+    /**
+     * 特定の記事のリアクションを削除
+     * @param int $article_id
+     * @param int $reaction_id
+     * @param int $user_id
+     * @return mixed
+     */
+    public function deleteReaction(int $article_id, int $reaction_id, int $user_id){
+        $sql = "DELETE FROM reaction_tag
+                WHERE article_id = :article_id AND reaction_id = :reaction_id AND user_id = :user_id";
+        return $this->execute($sql, [':article_id' => $article_id,
+                                    ':reaction_id' => $reaction_id,
+                                        ':user_id' => $user_id]);
+    }
+
+    /**
+     * 特定の記事のリアクションを追加
+     * @param int $article_id
+     * @param int $reaction_id
+     * @param int $user_id
+     * @return mixed
+     */
+    public function addReaction(int $article_id, int $reaction_id, int $user_id){
+        $sql = "INSERT INTO reaction_tag
+                VALUES (:article_id, :reaction_id, :user_id)";
+        return $this->execute($sql, [':article_id' => $article_id,
+                                    ':reaction_id' => $reaction_id,
+                                        ':user_id' => $user_id]);
     }
 }

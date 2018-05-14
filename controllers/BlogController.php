@@ -15,25 +15,31 @@ class BlogController extends Controller {
      */
     public function indexAction():string {
         $user = $this->_session->get(self::USER);
-        $posted_data = $this
+        $posted_dataset = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchAllPostedData($user[self::ID]);
 
-
         $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
         //$reactions = $this->_connect_model->get("Reaction")->getAllReactions();
-        foreach($posted_data as $key => $val){
-            //$posted_data[$key]["reaction"] = [int $reaction_id => 1, ...]
-            $posted_data[$key]["reaction"] = $this
+        foreach($posted_dataset as $key => $data){
+            //$posted_data[$key]["reaction"] = [[reaction_id => 1, COUNT => 2],[..=>..]...]
+            $posted_dataset[$key]["reaction"] = $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->computeAllReaction($val[self::ID]);
-            for($i=0; $i<count($reactions); $i++){
+                ->computeAllReaction($data[self::ID]);
+
+            foreach($posted_dataset[$key]["reaction"] as $reaction){
+
+            }
+
+            for($i=1; $i<=count($reactions); $i++){
                 if(!isset($posted_data[$key]["reaction"][$i])){
                     $posted_data[$key]["reaction"][$i] = 0;
                 }
             }
+
+
         }
 
         $index_view = $this->render([
@@ -65,8 +71,8 @@ class BlogController extends Controller {
 
         if(!strlen($message)){
             $errors[] = '投稿記事を入力してください。';
-        }elseif (mb_strlen($message) > 200){
-            $errors[] = '内容は200文字以内です。';
+        }elseif (mb_strlen($message) > 2000){
+            $errors[] = '内容は2000文字以内です。';
         }
 
         if(count($errors) === 0){
@@ -187,12 +193,12 @@ class BlogController extends Controller {
             $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->DeleteReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+                ->deleteReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }else{
             $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->AddReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+                ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }
 
         $this->redirect('index');
