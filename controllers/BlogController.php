@@ -15,24 +15,26 @@ class BlogController extends Controller {
      */
     public function indexAction():string {
         $user = $this->_session->get(self::USER);
-        $posted_data = $this->_connect_model
-                     ->get(self::ARTICLEMODEL_PREF)
-                     ->fetchAllPostedData($user[self::ID]);
+        $posted_data = $this
+            ->_connect_model
+            ->get(self::ARTICLEMODEL_PREF)
+            ->fetchAllPostedData($user[self::ID]);
 
+        $reactions = ["like", "surprise", "laugh", "dislike"];
         foreach($posted_data as $key => $val){
-            $posted_data[$key]["reaction"] = $this->_connect_model
-                                                  ->get(self::REACTIONTAGMODEL_PREF)
-                                                  ->selectAllReaction($val[self::ID]);
+            //$posted_data[$key]["reaction"] = [$reactions[0] => 1, reactions[1] => 0, ...]
+            $posted_data[$key]["reaction"] = $this
+                ->_connect_model
+                ->get(self::REACTIONTAGMODEL_PREF)
+                ->computeAllReaction($val[self::ID], $reactions);
         }
-        $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
-        
+
         $index_view = $this->render([
             self::USER     => $user,
             self::ARTICLES => $posted_data,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
             'reactions'    => $reactions,
-
         ]);
         return $index_view;
     }
@@ -135,14 +137,56 @@ class BlogController extends Controller {
         return $this->render(['article' => $posted_data]);
     }
 
-    public function reactAction($par) {
-        if(!$this->_request->isPost()){
-            $this->httpNotFound();
-        }
 
-        $this->_connect_model
-             ->get(self::REACTIONTAGMODEL_PREF)
-             ->doReaction($par[self::ID], $par['reaction_id']);
+    /**
+     * 無効なリアクションはNOT FOUNDでリダイレクトする
+     * @param int $reaction_id
+     * @throws FileNotFoundException
+     */
+    private function redirectInvalidReaction(int $reaction_id){
+        $is_valid_reaction_id = $this->_connect_model
+            ->get('Reaction')
+            ->isValidReactionId($reaction_id);
+        if(!$is_valid_reaction_id) $this->httpNotFound();
+    }
+
+    /**
+     * 記事に対するリアクションがすでに登録されていればtrue
+     * @param int $article_id
+     * @param int $reaction_id
+     * @param int $user_id
+     * @return bool
+     */
+    private function isRegistered(int $article_id, int $reaction_id, int $user_id){
+        return $this
+            ->_connect_model
+            ->get(self::REACTIONTAGMODEL_PREF)
+            ->isRegistered($article_id, $reaction_id, $user_id);
+    }
+    
+    /**
+     * 記事に対してリアクションの付加・取り消しを行う
+     * @param array $par
+     * @throws FileNotFoundException
+     */
+    public function reactAction(array $par) {
+        $reaction_id = $par['reaction_id'];
+
+        $this->redirectInvalidReaction($reaction_id);
+
+        $user_data = $this->_session->get(self::USER);
+
+        if($this->isRegistered($par[self::ID], $reaction_id, $user_data[self::ID])){
+            $this
+                ->_connect_model
+                ->get(self::REACTIONTAGMODEL_PREF)
+                ->DeleteReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+        }else{
+            $this
+                ->_connect_model
+                ->get(self::REACTIONTAGMODEL_PREF)
+                ->AddReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+        }
 
         $this->redirect('index');
     }
