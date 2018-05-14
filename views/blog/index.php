@@ -13,6 +13,6 @@ $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
 <h2>記事一覧</h2>
 <div id="articles" class="container" >
     <?php foreach ($articles as $article): ?>
-    <?php print $this->render('blog/article', ['article' => $article]); ?>
+    <?php print $this->render('blog/article', ['article' => $article, 'reactions' => $reactions]); ?>
     <?php endforeach; ?>
 </div>

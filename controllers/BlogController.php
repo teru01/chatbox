@@ -4,7 +4,7 @@ class BlogController extends Controller {
     const MESSAGE = 'message';
     const POST = 'article/post';
     const FOLLOW = 'account/follow';
-    const REACTIONTAGMODEL_PREF = 'Reaction_tag';
+    const REACTIONTAGMODEL_PREF = 'ReactionTag';
     protected $_authentication = ['index', 'post'];
 
 
@@ -20,7 +20,9 @@ class BlogController extends Controller {
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchAllPostedData($user[self::ID]);
 
-        $reactions = ["like", "surprise", "laugh", "dislike"];
+
+        $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
+        //$reactions = $this->_connect_model->get("Reaction")->getAllReactions();
         foreach($posted_data as $key => $val){
             //$posted_data[$key]["reaction"] = [int $reaction_id => 1, ...]
             $posted_data[$key]["reaction"] = $this
@@ -39,7 +41,7 @@ class BlogController extends Controller {
             self::ARTICLES => $posted_data,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
-          //  'reactions'    => $reactions,
+            'reactions'    => $reactions,
         ]);
         return $index_view;
     }

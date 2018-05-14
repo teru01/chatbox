@@ -8,7 +8,7 @@ class ReactionTagModel extends ExecuteModel {
      * @return bool
      */
     public function isRegistered(int $article_id, int $reaction_id, int $user_id):bool {
-        $sql = "SELECT COUNT (*)
+        $sql = "SELECT COUNT(*)
                 FROM reaction_tag
                 WHERE article_id = :article_id AND reaction_id = :reaction_id AND user_id = :user_id";
         $result = $this->execute($sql, [':article_id' => $article_id, ':reaction_id' => $reaction_id, ':user_id' => $user_id]);
@@ -23,11 +23,11 @@ class ReactionTagModel extends ExecuteModel {
      * @param int $article_id
      * @return array|null
      */
-    public function computeAllReaction(int $article_id):?array {
-        $sql = "SELECT reaction_id, COUNT (*)
+    public function computeAllReaction(int $article_id) {
+        $sql = "SELECT reaction_id, COUNT(*)
                 FROM reaction_tag
                 WHERE article_id = :article_id
                 GROUP BY reaction_id";
-        return $this->execute($sql, [':article_id' => $article_id]);
+        return $this->getAllRecord($sql, [':article_id' => $article_id]);
     }
 }
