@@ -22,11 +22,16 @@ class BlogController extends Controller {
 
         $reactions = ["like", "surprise", "laugh", "dislike"];
         foreach($posted_data as $key => $val){
-            //$posted_data[$key]["reaction"] = [$reactions[0] => 1, reactions[1] => 0, ...]
+            //$posted_data[$key]["reaction"] = [int $reaction_id => 1, ...]
             $posted_data[$key]["reaction"] = $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->computeAllReaction($val[self::ID], $reactions);
+                ->computeAllReaction($val[self::ID]);
+            for($i=0; $i<count($reactions); $i++){
+                if(!isset($posted_data[$key]["reaction"][$i])){
+                    $posted_data[$key]["reaction"][$i] = 0;
+                }
+            }
         }
 
         $index_view = $this->render([
@@ -34,7 +39,7 @@ class BlogController extends Controller {
             self::ARTICLES => $posted_data,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
-            'reactions'    => $reactions,
+          //  'reactions'    => $reactions,
         ]);
         return $index_view;
     }
@@ -163,7 +168,7 @@ class BlogController extends Controller {
             ->get(self::REACTIONTAGMODEL_PREF)
             ->isRegistered($article_id, $reaction_id, $user_id);
     }
-    
+
     /**
      * 記事に対してリアクションの付加・取り消しを行う
      * @param array $par
