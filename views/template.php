@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>
-        <?php if(isset($title)): print $this->escape($title) . ' - '; endif; ?>
+        <?php if(isset($title)): print self::escape($title) . ' - '; endif; ?>
         chatbox
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">

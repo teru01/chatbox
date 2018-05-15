@@ -43,7 +43,7 @@ class View{
      * @param null|string $string
      * @return string
      */
-    public function escape(?string $string){
+    public static function escape(?string $string){
         return htmlspecialchars($string, ENT_QUOTES);
     }
 }

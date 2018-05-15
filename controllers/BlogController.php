@@ -9,7 +9,7 @@ class BlogController extends Controller {
 
 
     /**
-     * 配列を利用できる形に変換する
+     * リアクションデータから取得した配列を利用できる形に変換する
      * In: [["reaction_id" => 1, "count" => 1],["reaction_id" => 3, "count" => 3]]
      * Out: [1 => 1, 2 => 0, 3 => 3, 4 => 0]
      * In: null
@@ -20,10 +20,8 @@ class BlogController extends Controller {
      */
     public static function formatAry(?array $ary, array $reactions){
         $formatted_ary = [];
-        if($ary) {
-            foreach ($ary as $content) {
-                $formatted_ary[$content["reaction_id"]] = $content["count"];
-            }
+        foreach ((array)$ary as $content) {
+            $formatted_ary[$content["reaction_id"]] = $content["count"];
         }
         for($i=1; $i<=count($reactions); $i++){
             if(!isset($formatted_ary[$i])){
@@ -31,6 +29,24 @@ class BlogController extends Controller {
             }
         }
         return $formatted_ary;
+    }
+
+    /**
+     * 渡された全ての記事に対してリアクション情報を付与して返す。
+     * @param array $posted_dataset
+     * @param array $reactions
+     * @return array|null
+     */
+    public function makePostsWithReactions(?array $posted_dataset, array $reactions):?array {
+        foreach((array)$posted_dataset as $key => $data){
+            $posted_dataset[$key]["reaction"] = $this
+                ->_connect_model
+                ->get(self::REACTIONTAGMODEL_PREF)
+                ->computeAllReaction($data[self::ID]);
+
+            $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"], $reactions);
+        }
+        return $posted_dataset;
     }
 
     /**
@@ -46,20 +62,12 @@ class BlogController extends Controller {
 
         $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
         //$reactions = $this->_connect_model->get("Reaction")->getAllReactions();
-        foreach($posted_dataset as $key => $data){
-            //$posted_data[$key]["reaction"] = [[reaction_id => 1, COUNT => 2],[..=>..]...]
 
-            $posted_dataset[$key]["reaction"] = $this
-                ->_connect_model
-                ->get(self::REACTIONTAGMODEL_PREF)
-                ->computeAllReaction($data[self::ID]);
-
-            $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"], $reactions);
-        }
+        $posted_dataset_with_reactions = $this->makePostsWithReactions($posted_dataset, $reactions);
 
         $index_view = $this->render([
             self::USER     => $user,
-            self::ARTICLES => $posted_dataset,
+            self::ARTICLES => $posted_dataset_with_reactions,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
             'reactions'    => $reactions,
@@ -216,7 +224,7 @@ class BlogController extends Controller {
                 ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }
 
-        $this->redirect(htmlspecialchars($_GET["referer"], ENT_QUOTES));
+        $this->redirect(View::escape($_GET["referer"]));
     }
 
 }

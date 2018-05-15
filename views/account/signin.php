@@ -2,7 +2,7 @@
 <h1 class="page_title">サインイン</h1>
 <div class="container">
 <form action="<?php print $base_url; ?>/account/authenticate" method="post">
-    <input type="hidden" name="_token" value="<?php print $this->escape($_token); ?>">
+    <input type="hidden" name="_token" value="<?php print self::escape($_token); ?>">
     <?php if (isset($errors) && count($errors) > 0){
         print $this->render('errors', ['errors' => $errors]);
     }
