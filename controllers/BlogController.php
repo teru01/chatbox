@@ -8,6 +8,30 @@ class BlogController extends Controller {
     protected $_authentication = ['index', 'post'];
 
 
+    /**
+     * 配列を利用できる形に変換する
+     * In: [["reaction_id" => 1, "count" => 1],["reaction_id" => 3, "count" => 3]]
+     * Out: [1 => 1, 2 => 0, 3 => 3, 4 => 0]
+     * In: null
+     * Out: [1 => 0, 2 => 0, 3 => 0, 4 => 0]
+     * @param array $ary
+     * @param array $reactions
+     * @return array
+     */
+    public static function formatAry(?array $ary, array $reactions){
+        $formatted_ary = [];
+        if($ary) {
+            foreach ($ary as $content) {
+                $formatted_ary[$content["reaction_id"]] = $content["count"];
+            }
+        }
+        for($i=1; $i<=count($reactions); $i++){
+            if(!isset($formatted_ary[$i])){
+                $formatted_ary[$i] = 0;
+            }
+        }
+        return $formatted_ary;
+    }
 
     /**
      * ユーザー専用ページを発行するアクションメソッド
@@ -24,27 +48,18 @@ class BlogController extends Controller {
         //$reactions = $this->_connect_model->get("Reaction")->getAllReactions();
         foreach($posted_dataset as $key => $data){
             //$posted_data[$key]["reaction"] = [[reaction_id => 1, COUNT => 2],[..=>..]...]
+
             $posted_dataset[$key]["reaction"] = $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
                 ->computeAllReaction($data[self::ID]);
 
-            foreach($posted_dataset[$key]["reaction"] as $reaction){
-
-            }
-
-            for($i=1; $i<=count($reactions); $i++){
-                if(!isset($posted_data[$key]["reaction"][$i])){
-                    $posted_data[$key]["reaction"][$i] = 0;
-                }
-            }
-
-
+            $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"], $reactions);
         }
 
         $index_view = $this->render([
             self::USER     => $user,
-            self::ARTICLES => $posted_data,
+            self::ARTICLES => $posted_dataset,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
             'reactions'    => $reactions,

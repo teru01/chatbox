@@ -24,7 +24,7 @@ class ReactionTagModel extends ExecuteModel {
      * @return array|null
      */
     public function computeAllReaction(int $article_id):?array {
-        $sql = "SELECT reaction_id, COUNT(*)
+        $sql = "SELECT reaction_id, COUNT(*) AS count
                 FROM reaction_tag
                 WHERE article_id = :article_id
                 GROUP BY reaction_id";
