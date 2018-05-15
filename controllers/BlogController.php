@@ -130,10 +130,13 @@ class BlogController extends Controller {
             $this->httpNotFound();
         }
 
-        $posted_data = $this
+        $posted_dataset = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchPostedMessage($user_data[self::ID]);
+
+        $posted_dataset_with_reactions = $this->makePostsWithReactions($posted_dataset, $reactions);
+
 
         $following = null;
         if($this->_session->isAuthenticated()){
@@ -148,7 +151,7 @@ class BlogController extends Controller {
 
         return $this->render([
             self::USER => $user_data,
-            self::ARTICLES => $posted_data,
+            self::ARTICLES => $posted_dataset,
             'following' => $following,
             self::TOKEN => $this->getToken(self::FOLLOW),
         ]);
