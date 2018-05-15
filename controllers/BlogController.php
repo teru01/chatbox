@@ -200,7 +200,7 @@ class BlogController extends Controller {
     public function reactAction(array $par) {
         $reaction_id = $par['reaction_id'];
 
-        $this->redirectInvalidReaction($reaction_id);
+        //$this->redirectInvalidReaction($reaction_id);
 
         $user_data = $this->_session->get(self::USER);
 
@@ -216,7 +216,7 @@ class BlogController extends Controller {
                 ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }
 
-        $this->redirect('index');
+        $this->redirect(htmlspecialchars($_GET["referer"], ENT_QUOTES));
     }
 
 }

@@ -12,7 +12,7 @@
             <?php print $this->escape($article['time_stamp']); ?>
         </a>
         <?php foreach($reactions as $key => $r_id): ?>
-            <a href="<?php print $base_url; ?>/article/<?php print $this->escape($article['id']); ?>/<?php print $r_id; ?>" class="reaction_icons">
+            <a href="<?php print $base_url; ?>/article/<?php print $this->escape($article['id']); ?>/<?php print $r_id; ?>?referer=<?php print $this->escape($_SERVER["REQUEST_URI"]); ?>" class="reaction_icons">
                 <img src="<?php print("/images/reaction_icons/".$key.".png"); ?>">
             </a>
             <div class="reaction_counter">

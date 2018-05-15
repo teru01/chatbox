@@ -8,11 +8,11 @@ class ReactionTagModel extends ExecuteModel {
      * @return bool
      */
     public function isRegistered(int $article_id, int $reaction_id, int $user_id):bool {
-        $sql = "SELECT COUNT(*)
+        $sql = "SELECT COUNT(*) as count
                 FROM reaction_tag
                 WHERE article_id = :article_id AND reaction_id = :reaction_id AND user_id = :user_id";
-        $result = $this->execute($sql, [':article_id' => $article_id, ':reaction_id' => $reaction_id, ':user_id' => $user_id]);
-        if($result !== '0'){
+        $result = $this->getRecord($sql, [':article_id' => $article_id, ':reaction_id' => $reaction_id, ':user_id' => $user_id]);
+        if($result["count"] !== '0'){
             return true;
         }
         return false;

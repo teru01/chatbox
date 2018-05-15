@@ -52,4 +52,5 @@ abstract class ExecuteModel{
     public function getRecord(string $sql, $parameter=[]){
         return $this->execute($sql, $parameter)->fetch(PDO::FETCH_ASSOC);
     }
+
 }
