@@ -9,19 +9,21 @@ class BlogController extends Controller {
 
 
     /**
-     * リアクションデータから取得した配列を利用できる形に変換する
+     * DBから取得した配列を利用できる形に変換する
      * In: [["reaction_id" => 1, "count" => 1],["reaction_id" => 3, "count" => 3]]
      * Out: [1 => 1, 2 => 0, 3 => 3, 4 => 0]
      * In: null
      * Out: [1 => 0, 2 => 0, 3 => 0, 4 => 0]
-     * @param array $ary
+     * @param array|null $ary
      * @param array $reactions
+     * @param string $colm_l
+     * @param string $colm_r
      * @return array
      */
-    public static function formatAry(?array $ary, array $reactions){
+    public static function formatAry(?array $ary, array $reactions, string $colm_l, string $colm_r){
         $formatted_ary = [];
         foreach ((array)$ary as $content) {
-            $formatted_ary[$content["reaction_id"]] = $content["count"];
+            $formatted_ary[$content[$colm_l]] = $content[$colm_r];
         }
         for($i=1; $i<=count($reactions); $i++){
             if(!isset($formatted_ary[$i])){
@@ -44,7 +46,8 @@ class BlogController extends Controller {
                 ->get(self::REACTIONTAGMODEL_PREF)
                 ->computeAllReaction($data[self::ID]);
 
-            $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"], $reactions);
+            $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"],
+                $reactions, "reaction_id", "count");
         }
         return $posted_dataset;
     }
@@ -54,15 +57,12 @@ class BlogController extends Controller {
      * @return string
      */
     public function indexAction():string {
+        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
         $user = $this->_session->get(self::USER);
         $posted_dataset = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchAllPostedData($user[self::ID]);
-
-        $reactions = ["like" => 1, "surprise" => 2, "laugh" => 3, "dislike" => 4];
-        //$reactions = $this->_connect_model->get("Reaction")->getAllReactions();
-
         $posted_dataset_with_reactions = $this->makePostsWithReactions($posted_dataset, $reactions);
 
         $index_view = $this->render([
@@ -130,11 +130,12 @@ class BlogController extends Controller {
             $this->httpNotFound();
         }
 
+        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
+
         $posted_dataset = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchPostedMessage($user_data[self::ID]);
-
         $posted_dataset_with_reactions = $this->makePostsWithReactions($posted_dataset, $reactions);
 
 
@@ -150,10 +151,11 @@ class BlogController extends Controller {
         }
 
         return $this->render([
-            self::USER => $user_data,
-            self::ARTICLES => $posted_dataset,
-            'following' => $following,
-            self::TOKEN => $this->getToken(self::FOLLOW),
+            self::USER     => $user_data,
+            self::ARTICLES => $posted_dataset_with_reactions,
+            'following'    => $following,
+            self::TOKEN    => $this->getToken(self::FOLLOW),
+            'reactions'    => $reactions,
         ]);
     }
 
@@ -164,16 +166,21 @@ class BlogController extends Controller {
      * @throws FileNotFoundException
      */
     public function specificAction(array $par):string {
+        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
+
         $posted_data = $this
             ->_connect_model
             ->get(self::ARTICLEMODEL_PREF)
             ->fetchSpecificMessage($par[self::ID], $par['user_name']);
-
         if(!$posted_data) {
             $this->httpNotFound();
         }
 
-        return $this->render(['article' => $posted_data]);
+        $posted_data_with_reactions = $this->makePostsWithReactions([$posted_data], $reactions);
+
+        return $this->render([
+            'article' => $posted_data_with_reactions[0],
+            'reactions' => $reactions,]);
     }
 
 

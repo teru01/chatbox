@@ -53,4 +53,14 @@ abstract class ExecuteModel{
         return $this->execute($sql, $parameter)->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     *
+     * @param string $sql
+     * @param array $parameter
+     * @return mixed
+     */
+    public function getKeyPair(string $sql, $parameter=[]){
+        return $this->execute($sql, $parameter)->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
 }

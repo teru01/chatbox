@@ -8,6 +8,6 @@ class ReactionModel extends ExecuteModel{
      */
     public function fetchAllReaction():?array {
         $sql = "SELECT description, id from reaction;";
-        return $this->getAllRecord($sql);
+        return $this->getKeyPair($sql);
     }
 }

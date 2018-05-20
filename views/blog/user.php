@@ -13,6 +13,6 @@
 <?php endif; ?>
 <div id="articles">
     <?php foreach ((array)$articles as $article): ?>
-    <?php print $this->render('blog/article', ['article' => $article]); ?>
+    <?php print $this->render('blog/article', ['article' => $article, 'reactions' => $reactions]); ?>
     <?php endforeach; ?>
 </div>
