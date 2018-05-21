@@ -11,6 +11,18 @@ class AccountController extends Controller{
     const DEFAULT_USERIMG = 'default_image.jpg';
     const USERIMAGE_ROOT = '/images/user_imgs/';
 
+    /**
+     * ユーザー画像がセットされてなければデフォルト画像をセット
+     * @param $user_data
+     * @return array
+     */
+    public static function setDefaultImage($user_data):array {
+        if(!isset($user_data[self::USER_IMG])){
+            $user_data[self::USER_IMG] = self::USERIMAGE_ROOT.self::DEFAULT_USERIMG;
+        }
+        return $user_data;
+    }
+
 
     /**
      * ユーザーアカウント情報を発行するアクションメソッド
@@ -19,9 +31,7 @@ class AccountController extends Controller{
     public function indexAction(): string {
         $user_data = $this->_session->get(self::USER);
         $errors = $this->_session->get('errors');
-        if(!isset($user_data[self::USER_IMG])){
-            $user_data[self::USER_IMG] = self::USERIMAGE_ROOT.self::DEFAULT_USERIMG;
-        }
+        $user_data_with_img = self::setDefaultImage($user_data);
 
         $followingUsers = $this
             ->_connect_model
@@ -29,7 +39,7 @@ class AccountController extends Controller{
             ->getFollowingUser($user_data[self::ID]);
 
         return $this->render([
-            'user'           => $user_data,
+            'user'           => $user_data_with_img,
             'followingUsers' => $followingUsers,
             'errors'         => $errors,
             ]);

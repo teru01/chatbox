@@ -67,4 +67,16 @@ class UserModel extends ExecuteModel{
         $this->execute($sql, [':img_path' => $img_path, ':user_id' => $user_id]);
     }
 
+
+    /**
+     * 自分以外のユーザ情報を取得する
+     * @param int $user_id
+     * @return mixed
+     */
+    public function fetchOtherUsers(int $user_id){
+        $sql = "SELECT user_name, user_img
+                FROM   user
+                WHERE  user_id != :user_id";
+        return $this->getAllRecord($sql, [':user_id' => $user_id]);
+    }
 }
