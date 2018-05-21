@@ -55,7 +55,15 @@ h2,h3 {
 
 .article_content{
     margin-bottom: 5px;
+    margin-right: 5px;
 }
+
+/*.other_users {*/
+    /*float: right;*/
+    /*width: 100px;*/
+    /*margin-right: 20px;*/
+    /*margin-left: 10px;*/
+/*}*/
 
 /* クラスセレクターerror_listが適用されているul要素に適用する */
 ul.error_list {
@@ -106,7 +114,7 @@ ul.error_list li {
 
 .reaction_icons {
     display: inline-block;
-    /*margin-left: 10px;*/
+    margin-left: 30px;
     /*margin-bottom: 5px;*/
     padding-bottom: 10px;
 }

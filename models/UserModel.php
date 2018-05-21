@@ -49,8 +49,8 @@ class UserModel extends ExecuteModel{
      */
     public function getFollowingUser(int $user_id){
         $sql = "SELECT    u.*
-                FROM      user u
-                LEFT JOIN following_user f ON f.following_id = u.id
+                FROM      user AS u
+                LEFT JOIN following_user AS f ON f.following_id = u.id
                 WHERE     f.user_id = :user_id";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
@@ -69,14 +69,22 @@ class UserModel extends ExecuteModel{
 
 
     /**
-     * 自分以外のユーザ情報を取得する
+     * フォローしてないユーザ情報を取得する
      * @param int $user_id
      * @return mixed
      */
     public function fetchOtherUsers(int $user_id){
-        $sql = "SELECT user_name, user_img
-                FROM   user
-                WHERE  user_id != :user_id";
+        $sql = "SELECT     *
+                FROM       user
+                WHERE      id != :user_id AND id NOT IN 
+                (
+                  SELECT    u.id
+                  FROM      user AS u
+                  LEFT JOIN following_user AS f 
+                  ON        u.id = f.following_id
+                  WHERE     f.user_id = :user_id
+                )
+                ";
         return $this->getAllRecord($sql, [':user_id' => $user_id]);
     }
 }

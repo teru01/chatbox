@@ -33,6 +33,14 @@ class AccountController extends Controller{
         $errors = $this->_session->get('errors');
         $user_data_with_img = self::setDefaultImage($user_data);
 
+        $other_users_data = $this
+            ->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->fetchOtherUsers($user_data[self::ID]);
+        foreach($other_users_data as $key => $someone_data){
+            $other_users_data[$key] = AccountController::setDefaultImage($someone_data);
+        }
+
         $followingUsers = $this
             ->_connect_model
             ->get(self::USERMODEL_PREF)
@@ -42,6 +50,7 @@ class AccountController extends Controller{
             'user'           => $user_data_with_img,
             'followingUsers' => $followingUsers,
             'errors'         => $errors,
+            'others'       => $other_users_data,
             ]);
     }
 

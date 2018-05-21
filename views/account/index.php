@@ -5,8 +5,8 @@
         <div class="user_image">
             <img src="<?php print self::escape($user['user_img']) ?>">
             <form method="post" action="<?php print $base_url; ?>/account/upload" enctype="multipart/form-data">
-                <input type="file" name="upload"><br>
-                <input type="submit" value="アップロード">
+                <input class="file_select" type="file" name="upload"><br>
+                <input class="btn-info" type="submit" value="アップロード">
             </form>
 
         </div>
@@ -32,5 +32,17 @@
             </a>
         </li>
         <?php endforeach; ?>
+    </ul>
+</div>
+<div class="other_users">
+    <h2>その他のユーザー</h2>
+    <ul>
+    <?php foreach ((array)$others as $someone): ?>
+        <li>
+            <a href="<?php print $base_url; ?>/user/<?php print self::escape($someone['user_name']); ?>">
+                <?php print self::escape($someone['user_name']); ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
     </ul>
 </div>

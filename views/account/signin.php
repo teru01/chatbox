@@ -8,7 +8,7 @@
     }
     print $this->render('account/inputs', ['user_name' => $user_name, 'password' => $password,]);
     ?>
-    <p><input type="submit" value="サインイン"></p>
+    <p><input class="btn-info" type="submit" value="サインイン"></p>
 </form>
 </div>
 

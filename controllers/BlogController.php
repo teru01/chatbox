@@ -53,16 +53,6 @@ class BlogController extends Controller {
      */
     public function indexAction():string {
         $user = $this->_session->get(self::USER);
-
-        $other_users_data = $this
-            ->_connect_model
-            ->get(self::USERMODEL_PREF)
-            ->fetchOtherUsers($user[self::ID]);
-        foreach($other_users_data as $key => $someone_data){
-            $other_users_data[$key] = AccountController::setDefaultImage($someone_data);
-        }
-
-
         $reactions = $this->_connect_model->get(self::REACTIONMODEL_PREF)->fetchAllReaction();
         $posted_dataset = $this
             ->_connect_model
@@ -75,7 +65,6 @@ class BlogController extends Controller {
             self::ARTICLES => $posted_dataset_with_reactions,
             self::MESSAGE  => '',
             self::TOKEN    => $this->getToken(self::POST),
-            'others'       => $other_users_data_with_img,
             'reactions'    => $reactions,
         ]);
         return $index_view;

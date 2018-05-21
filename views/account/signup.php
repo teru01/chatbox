@@ -11,6 +11,6 @@
             'user_name' => $user_name,
             'password'  => $password,
         ]); ?>
-    <p><input type="submit" value="登録"></p>
+    <p><input class="btn-info" type="submit" value="登録"></p>
 </form>
 </div>
