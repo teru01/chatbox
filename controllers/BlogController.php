@@ -5,6 +5,7 @@ class BlogController extends Controller {
     const POST = 'article/post';
     const FOLLOW = 'account/follow';
     const REACTIONTAGMODEL_PREF = 'ReactionTag';
+    const REACTIONMODEL_PREF = 'Reaction';
     protected $_authentication = ['index', 'post'];
 
 
@@ -57,7 +58,7 @@ class BlogController extends Controller {
      * @return string
      */
     public function indexAction():string {
-        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
+        $reactions = $this->_connect_model->get(self::REACTIONMODEL_PREF)->fetchAllReaction();
         $user = $this->_session->get(self::USER);
         $posted_dataset = $this
             ->_connect_model
@@ -130,7 +131,7 @@ class BlogController extends Controller {
             $this->httpNotFound();
         }
 
-        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
+        $reactions = $this->_connect_model->get(self::REACTIONMODEL_PREF)->fetchAllReaction();
 
         $posted_dataset = $this
             ->_connect_model
@@ -166,7 +167,7 @@ class BlogController extends Controller {
      * @throws FileNotFoundException
      */
     public function specificAction(array $par):string {
-        $reactions = $this->_connect_model->get("Reaction")->fetchAllReaction();
+        $reactions = $this->_connect_model->get(self::REACTIONMODEL_PREF)->fetchAllReaction();
 
         $posted_data = $this
             ->_connect_model
@@ -191,7 +192,7 @@ class BlogController extends Controller {
      */
     private function redirectInvalidReaction(int $reaction_id){
         $is_valid_reaction_id = $this->_connect_model
-            ->get('Reaction')
+            ->get(self::REACTIONMODEL_PREF)
             ->isValidReactionId($reaction_id);
         if(!$is_valid_reaction_id) $this->httpNotFound();
     }
@@ -218,7 +219,7 @@ class BlogController extends Controller {
     public function reactAction(array $par) {
         $reaction_id = $par['reaction_id'];
 
-        //$this->redirectInvalidReaction($reaction_id);
+        $this->redirectInvalidReaction($reaction_id);
 
         $user_data = $this->_session->get(self::USER);
 
@@ -234,7 +235,7 @@ class BlogController extends Controller {
                 ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }
 
-        $this->redirect(View::escape($_GET["referer"]));
+        $this->redirect('/');
     }
 
 }
