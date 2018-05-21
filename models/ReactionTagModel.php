@@ -28,7 +28,7 @@ class ReactionTagModel extends ExecuteModel {
                 FROM reaction_tag
                 WHERE article_id = :article_id
                 GROUP BY reaction_id";
-        return $this->getAllRecord($sql, [':article_id' => $article_id]);
+        return $this->getKeyPair($sql, [':article_id' => $article_id]);
     }
 
     /**

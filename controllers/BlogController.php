@@ -11,21 +11,15 @@ class BlogController extends Controller {
 
     /**
      * DBから取得した配列を利用できる形に変換する
-     * In: [["reaction_id" => 1, "count" => 1],["reaction_id" => 3, "count" => 3]]
+     * In: [1 => 1, 3 => 3]
      * Out: [1 => 1, 2 => 0, 3 => 3, 4 => 0]
      * In: null
      * Out: [1 => 0, 2 => 0, 3 => 0, 4 => 0]
-     * @param array|null $ary
+     * @param array|null $formatted_ary
      * @param array $reactions
-     * @param string $colm_l
-     * @param string $colm_r
-     * @return array
+     * @return array|null
      */
-    public static function formatAry(?array $ary, array $reactions, string $colm_l, string $colm_r){
-        $formatted_ary = [];
-        foreach ((array)$ary as $content) {
-            $formatted_ary[$content[$colm_l]] = $content[$colm_r];
-        }
+    public static function formatAry(?array $formatted_ary, array $reactions){
         for($i=1; $i<=count($reactions); $i++){
             if(!isset($formatted_ary[$i])){
                 $formatted_ary[$i] = 0;
@@ -48,7 +42,7 @@ class BlogController extends Controller {
                 ->computeAllReaction($data[self::ID]);
 
             $posted_dataset[$key]["reaction"] = self::formatAry($posted_dataset[$key]["reaction"],
-                $reactions, "reaction_id", "count");
+                $reactions);
         }
         return $posted_dataset;
     }
