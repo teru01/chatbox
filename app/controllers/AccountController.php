@@ -50,7 +50,7 @@ class AccountController extends Controller{
             'user'           => $user_data_with_img,
             'followingUsers' => $followingUsers,
             'errors'         => $errors,
-            'others'       => $other_users_data,
+            'others'         => $other_users_data,
             ]);
     }
 
@@ -60,7 +60,7 @@ class AccountController extends Controller{
      */
     public function signupAction(): string {
         if($this->_session->isAuthenticated()){
-            $this->redirect(self::ACCOUNT_PATH);
+            return $this->redirect(self::ACCOUNT_PATH);
         }
         $signup_view = $this->render([
             self::USER_NAME => '',
@@ -83,7 +83,7 @@ class AccountController extends Controller{
         }
 
         if($this->_session->isAuthenticated()){
-            $this->redirect(self::ACCOUNT_PATH);
+            return $this->redirect(self::ACCOUNT_PATH);
         }
 
         $token = $this->_request->getPost(self::TOKEN);
@@ -114,7 +114,7 @@ class AccountController extends Controller{
             $this->_session->setAuthenticateStatus(true);
             $user = $this->_connect_model->get(self::USERMODEL_PREF)->getUserRecord($user_name);
             $this->_session->set('user', $user);
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
         return $this->render([
@@ -132,7 +132,7 @@ class AccountController extends Controller{
      */
     public function signinAction(): string {
         if($this->_session->isAuthenticated()){
-            $this->redirect(self::ACCOUNT_PATH);
+            return $this->redirect(self::ACCOUNT_PATH);
         }
 
         return $this->render([
@@ -149,7 +149,7 @@ class AccountController extends Controller{
      */
     public function authenticateAction(): ?string {
         if($this->_session->isAuthenticated()){
-            $this->redirect(self::ACCOUNT_PATH);
+            return $this->redirect(self::ACCOUNT_PATH);
         }
 
         if(!$this->_request->isPost()){
@@ -158,7 +158,7 @@ class AccountController extends Controller{
 
         $token = $this->_request->getPost(self::TOKEN);
         if(!$this->checkToken(self::SIGNIN, $token)){
-            $this->redirect('/' . self::SIGNIN);
+            return $this->redirect('/' . self::SIGNIN);
         }
 
         $user_name = $this->_request->getPost(self::USER_NAME);
@@ -238,7 +238,11 @@ class AccountController extends Controller{
     }
 
     private function setErrMsg(?string $err_msg){
-        $this->_session->set('errors', $err_msg ? [$err_msg] : null);
+        $err_ary = null;
+        if($err_msg){
+            $err_ary[] = $err_msg;
+        }
+        $this->_session->set('errors', $err_ary);
     }
 
     /**
@@ -289,8 +293,8 @@ class AccountController extends Controller{
 
 
             default:
-                $this->setErrMsg('jpeg, pngのいずれかをアップロードしてください。');
-                $this->redirect(self::ACCOUNT_PATH);
+                $this->setErrMsg('jpeg, png, gifのいずれかをアップロードしてください。');
+                return false;
         }
     }
 
@@ -315,6 +319,7 @@ class AccountController extends Controller{
      * ユーザーアイコン画像をアップロードする
      */
     public function uploadAction(){
+
         if(!$this->_request->isPost()){
             $this->httpNotFound();
         }
@@ -325,7 +330,7 @@ class AccountController extends Controller{
         $this->setErrMsg(null);
         if ($_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
             $this->storeUploadErrorMsg();
-            $this->redirect(self::ACCOUNT_PATH);
+            return $this->redirect(self::ACCOUNT_PATH);
         }
 
         $hashed_filename = hash("sha256", $_FILES['upload']['name']);
@@ -337,6 +342,6 @@ class AccountController extends Controller{
         }else{
             $this->setErrMsg('アップロード処理に失敗しました。');
         }
-        $this->redirect(self::ACCOUNT_PATH);
+        return $this->redirect(self::ACCOUNT_PATH);
     }
 }

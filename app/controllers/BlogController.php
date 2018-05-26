@@ -229,7 +229,7 @@ class BlogController extends Controller {
                 ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
         }
 
-        $this->redirect('/');
+        return $this->redirect('/');
     }
 
 }
