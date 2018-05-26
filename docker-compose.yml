@@ -20,6 +20,7 @@ services:
     volumes:
      - ./mvc_docroot:/var/www/html/mvc_docroot
      - ./app:/var/www/html/app
+    command: chmod 777 /var/www/html/mvc_docroot/images/user_imgs
 
   db:
     build: ./db-docker
