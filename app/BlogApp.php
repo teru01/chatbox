@@ -1,5 +1,4 @@
 <?php
-require_once 'MysqlAccessData.php';
 
 class BlogApp extends AppBase{
     protected $_signinAction = ['account', 'signin'];
@@ -8,9 +7,9 @@ class BlogApp extends AppBase{
      */
     protected function doDbConnection(){
         $this->_connectModel->connect('master', [
-            'string'   =>  'mysql:dbname=chatbox;host=localhost; charset=utf8',
-            'user'     =>  MYSQL_USER,
-            'password' =>  MYSQL_PASS,
+            'string'   =>  'mysql:dbname=chatbox;host='.getenv("DATABASE_HOST").';charset=utf8',
+            'user'     =>  "root",
+            'password' =>  "root",
         ]);
     }
 

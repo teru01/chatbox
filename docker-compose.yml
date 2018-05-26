@@ -1,0 +1,35 @@
+version: '3.6'
+services:
+  web:
+    image: nginx:1.13.12-alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    volumes:
+      - ./nginx_default.conf:/etc/nginx/conf.d/default.conf
+      - ./mvc_docroot:/var/www/html/mvc_docroot
+      - ./app:/var/www/html/app
+
+  app:
+    build: ./app-docker
+    environment:
+      DATABASE_HOST: db
+    depends_on:
+      - db
+    volumes:
+     - ./mvc_docroot:/var/www/html/mvc_docroot
+     - ./app:/var/www/html/app
+
+  db:
+    build: ./db-docker
+    environment:
+      MYSQL_DATABASE: 'chatbox'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
+

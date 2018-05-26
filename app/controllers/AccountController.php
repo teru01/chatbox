@@ -287,15 +287,9 @@ class AccountController extends Controller{
                 $did_succeeded = imagepng($thumbnail, $img_dest);
                 return $did_succeeded;
 
-            case IMAGETYPE_GIF:
-                $base_img = imagecreatefromgif($uploaded_file);
-                imagecopyresampled($thumbnail, $base_img, 0, 0, 0, 0,
-                    $thumb_wid, $thumb_hei, $width, $height);
-                $did_succeeded = imagegif($thumbnail, $img_dest);
-                return $did_succeeded;
 
             default:
-                $this->setErrMsg('jpeg, png, gifのいずれかをアップロードしてください。');
+                $this->setErrMsg('jpeg, pngのいずれかをアップロードしてください。');
                 $this->redirect(self::ACCOUNT_PATH);
         }
     }

@@ -1,5 +1,5 @@
 <?php
-require '../bootstrap.php';
-require '../BlogApp.php';
+require '../app/bootstrap.php';
+require '../app/BlogApp.php';
 $app = new BlogApp(true);
 $app->run();
