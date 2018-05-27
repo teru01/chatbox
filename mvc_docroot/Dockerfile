@@ -1,4 +1,5 @@
 FROM php:7.1.9-fpm-alpine
+COPY --chown=www-data:www-data . /var/www/html/mvc_docroot/
 RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
   docker-php-ext-configure gd \
     --with-gd \

@@ -2,6 +2,8 @@
 $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
 
 <p>投稿する:</p>
+<?php echo exec('whoami');?>
+<?php echo exec('groups');?>
 <form action="<?php print $base_url; ?>/article/post" method="post" class="container">
     <input type="hidden" name="_token" value="<?php print self::escape($_token); ?>">
     <?php if(isset($errors) && count($errors)): ?>
