@@ -58,7 +58,7 @@ class AccountController extends Controller{
      * アカウント登録画面を発行するアクションメソッド
      * @return string
      */
-    public function signupAction(): string {
+    public function signupAction(): ?string {
         if($this->_session->isAuthenticated()){
             return $this->redirect(self::ACCOUNT_PATH);
         }
@@ -130,7 +130,7 @@ class AccountController extends Controller{
      * サインイン用の画面を発行する
      * @return string
      */
-    public function signinAction(): string {
+    public function signinAction(): ?string {
         if($this->_session->isAuthenticated()){
             return $this->redirect(self::ACCOUNT_PATH);
         }
