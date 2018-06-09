@@ -2,6 +2,7 @@ version: '3.6'
 services:
   web:
     image: nginx:1.13.12-alpine
+    container_name: web_c
     ports:
       - "80:80"
     depends_on:
@@ -13,6 +14,8 @@ services:
 
   app:
     build: ./mvc_docroot
+    container_name: app_c
+    user: www-data
     env_file:
       - .env
     depends_on:
@@ -25,6 +28,7 @@ services:
 
   db:
     image: mariadb:10.2
+    container_name: db_c
     env_file:
       - .env
     expose:
