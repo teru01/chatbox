@@ -19,6 +19,7 @@ services:
       - db
     volumes:
       - ./app:/var/www/html/app:ro
+      - ./mvc_docroot:/var/www/html/mvc_docroot
     links:
       - db
 

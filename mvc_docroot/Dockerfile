@@ -1,5 +1,4 @@
 FROM php:7.1.9-fpm-alpine
-COPY . /var/www/html/mvc_docroot/
 RUN set -x &&\
   apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
   docker-php-ext-configure gd \
