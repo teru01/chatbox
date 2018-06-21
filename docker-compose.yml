@@ -1,16 +1,18 @@
 version: '3.6'
 services:
   web:
-    image: nginx:1.13.12-alpine
+    build: ./web
     container_name: web_c
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - app
     volumes:
-      - ./nginx_default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./web/nginx_default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./mvc_docroot:/var/www/html/mvc_docroot
       - ./app:/var/www/html/app:ro
+      - log-data:/var/log/nginx
 
   app:
     build: ./mvc_docroot
@@ -38,4 +40,5 @@ services:
       - db-data:/var/lib/mysql
 volumes:
   db-data:
+  log-data:
 
