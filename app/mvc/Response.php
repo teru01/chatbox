@@ -3,7 +3,7 @@ class Response{
     protected $_content;
     protected $_statusCode = 200;
     protected $_headers = [];
-    const HTTP = 'HTTP/1.1';
+    const HTTP = 'HTTP/2';
 
     /**
      * @param string|null $content
