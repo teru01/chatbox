@@ -58,6 +58,10 @@ h2,h3 {
     margin-right: 5px;
 }
 
+.arrow_icon {
+    float: right;
+}
+
 /*.other_users {*/
     /*float: right;*/
     /*width: 100px;*/
