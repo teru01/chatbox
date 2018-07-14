@@ -1,5 +1,11 @@
 <div class="article">
     <div class="arrow_icon"><a href="#" class="arrow"><img src="/images/navi_icons/arrow.gif"></a></div>
+    <div class="article_menu" style="display: none">
+        <ul>
+            <li><a href="#">ts</a></li>
+            <li><a href="#">ts</a></li>
+        </ul>
+    </div>
     <div class="article_content">
         <p>
             <a href="<?php print $base_url; ?>/user/<?php print self::escape($article['user_name']); ?>">
