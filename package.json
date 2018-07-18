@@ -1,0 +1,19 @@
+{
+  "name": "chatbox",
+  "version": "1.0.0",
+  "description": "simple chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teru01/chatbox.git"
+  },
+  "author": "teruyaono",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teru01/chatbox/issues"
+  },
+  "homepage": "https://github.com/teru01/chatbox#readme"
+}

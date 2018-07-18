@@ -14,7 +14,10 @@ $this->setPageTitle('title', 'ユーザーのトップページ'); ?>
 <h2>記事一覧</h2>
 <div id="articles" class="container" >
     <?php foreach ((array)$articles as $article): ?>
-    <?php print $this->render('blog/article', ['article' => $article, 'reactions' => $reactions]); ?>
+    <?php print $this->render('blog/article', ['article' => $article,
+                                             'reactions' => $reactions,
+                                                  'user' => $user]);
+    ?>
     <?php endforeach; ?>
 </div>
 

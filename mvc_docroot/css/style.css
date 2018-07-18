@@ -58,10 +58,18 @@ h2,h3 {
     margin-right: 5px;
 }
 
-.arrow_icon {
-    float: right;
+.message {
+    margin-left: 7px;
 }
 
+.article_menu {
+    list-style: none;
+}
+
+.arrow_wrapper {
+    display: inline-block;
+    width: 34px;
+}
 /*.other_users {*/
     /*float: right;*/
     /*width: 100px;*/
