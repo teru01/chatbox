@@ -18,9 +18,9 @@
             <?php print self::escape($article['time_stamp']); ?>
         </a>
         <?php foreach($reactions as $key => $r_id): ?>
-            <a href="<?php print $base_url; ?>/article/<?php print self::escape($article['id']); ?>/<?php print $r_id; ?>" class="reaction_icons">
+            <button type='button' value="<?php print $base_url; ?>/article/<?php print self::escape($article['id']); ?>/<?php print $r_id; ?>" class="reaction_icons">
                 <img src="<?php print("/images/reaction_icons/".$key.".png"); ?>">
-            </a>
+            </button>
             <div class="reaction_counter">
                 <?php print self::escape($article["reaction"][$r_id]) ?>
             </div>

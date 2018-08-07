@@ -212,24 +212,30 @@ class BlogController extends Controller {
      */
     public function reactAction(array $par) {
         $reaction_id = $par['reaction_id'];
+        $article_id = $par['article_id'];
 
         $this->redirectInvalidReaction($reaction_id);
 
         $user_data = $this->_session->get(self::USER);
 
-        if($this->isRegistered($par[self::ID], $reaction_id, $user_data[self::ID])){
+        if($this->isRegistered($article_id, $reaction_id, $user_data[self::ID])){
             $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->deleteReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+                ->deleteReaction($article_id, $reaction_id, $user_data[self::ID]);
         }else{
             $this
                 ->_connect_model
                 ->get(self::REACTIONTAGMODEL_PREF)
-                ->addReaction($par[self::ID], $reaction_id, $user_data[self::ID]);
+                ->addReaction($article_id, $reaction_id, $user_data[self::ID]);
         }
 
-        return $this->redirect('/');
+        $reaction_num = $this
+            ->_connect_model
+            ->get(self::REACTIONTAGMODEL_PREF)
+            ->computeSpecificReaction($par['article_id'], $reaction_id);
+
+        print($reaction_num);
     }
 
 }

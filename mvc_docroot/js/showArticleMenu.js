@@ -11,7 +11,8 @@ const switch_article_menu = (i) => {
 document.addEventListener('DOMContentLoaded', () => {
     const it = Array.from(document.getElementsByClassName('arrow')).entries();
     for(let elm of it){
-        elm[1].addEventListener('click', () => {
+        elm[1].addEventListener('click', (event) => {
+            event.preventDefault();
             switch_article_menu(elm[0]);
         }, false);
     }

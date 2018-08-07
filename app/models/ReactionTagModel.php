@@ -32,6 +32,20 @@ class ReactionTagModel extends ExecuteModel {
     }
 
     /**
+     * ある記事、あるリアクションに対する回数を取得する
+     * @param int $article_id
+     * @param int $reaction_id
+     * @return int
+     */
+    public function computeSpecificReaction(int $article_id, int $reaction_id):int {
+        $sql = "SELECT COUNT(*) AS count
+                FROM   reaction_tag
+                WHERE  article_id = :article_id AND reaction_id = :reaction_id";
+        $result = $this->getRecord($sql, [':article_id' => $article_id, ':reaction_id' => $reaction_id]);
+        return (int)$result['count'];
+    }
+
+    /**
      * 特定の記事のリアクションを削除
      * @param int $article_id
      * @param int $reaction_id
