@@ -161,6 +161,11 @@ class BlogController extends Controller {
      * @throws FileNotFoundException
      */
     public function specificAction(array $par):string {
+        $user_data = $this
+            ->_connect_model
+            ->get(self::USERMODEL_PREF)
+            ->getUserRecord($par['user_name']);
+
         $reactions = $this->_connect_model->get(self::REACTIONMODEL_PREF)->fetchAllReaction();
 
         $posted_data = $this
@@ -174,8 +179,9 @@ class BlogController extends Controller {
         $posted_data_with_reactions = $this->makePostsWithReactions([$posted_data], $reactions);
 
         return $this->render([
-            'article' => $posted_data_with_reactions[0],
-            'reactions' => $reactions,]);
+            self::USER   => $user_data,
+            'article'    => $posted_data_with_reactions[0],
+            'reactions'  => $reactions,]);
     }
 
 
@@ -235,7 +241,7 @@ class BlogController extends Controller {
             ->get(self::REACTIONTAGMODEL_PREF)
             ->computeSpecificReaction($par['article_id'], $reaction_id);
 
-        print($reaction_num);
+        return $reaction_num;
     }
 
 }

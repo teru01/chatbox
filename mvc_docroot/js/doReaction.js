@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elm.nextElementSibling.textContent = '?';
             }, false);
 
-            xhr.open('GET', );
+            xhr.open('GET', elm.value);
 
             xhr.send(null);
         }, false);
