@@ -124,16 +124,34 @@ ul.error_list li {
     margin-top: 50px;
 }
 
-.reaction_icons {
-    display: inline-block;
-    margin-left: 30px;
-    /*margin-bottom: 5px;*/
-    padding-bottom: 10px;
-}
-
 .reaction_counter {
     display: inline-block;
+    position: absolute;
     width: 20px;
     margin-left: 5px;
-    margin-right: 10px;
+    margin-top: 5px;
+}
+
+@media screen and (min-width: 1200px){
+    .reaction_icons {
+        display: inline-block;
+        margin-left: 120px;
+        position: relative;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px){
+    .reaction_icons {
+        display: inline-block;
+        margin-left: 60px;
+        position: relative;
+    }
+}
+
+@media screen and (min-width: 300px) and (max-width: 768px){
+    .reaction_icons {
+        display: inline-block;
+        margin-left: 25px;
+        position: relative;
+    }
 }
