@@ -6,9 +6,13 @@
                 <?php print self::escape($article['user_name']); ?>
             </a>
         </p>
-        <div class="message" ><?php print self::escape($article['message']); ?></div>
+        <div class="message" >
+            <p>
+                <?php print self::escape($article['message']); ?>
+            </p>
+        </div>
     </div>
-    <div>
+    <div class="article_info">
         <div class="arrow_wrapper">
         <?php if($user['user_name'] === $article['user_name']): ?>
             <a href="#" class="arrow"><img src="/images/navi_icons/arrow.gif"></a>
