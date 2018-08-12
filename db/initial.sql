@@ -7,7 +7,7 @@ CREATE TABLE `user` (
   `user_img` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `article` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE `article` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `article_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `following_user` (
   `user_id` int(11) NOT NULL,
@@ -27,13 +27,13 @@ CREATE TABLE `following_user` (
   KEY `following_id` (`following_id`),
   CONSTRAINT `following_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `following_user_ibfk_2` FOREIGN KEY (`following_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `reaction` (
   `id` int(11) NOT NULL,
   `description` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `reaction_tag` (
   `article_id` int(11) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `reaction_tag` (
   CONSTRAINT `reaction_tag_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`),
   CONSTRAINT `reaction_tag_ibfk_2` FOREIGN KEY (`reaction_id`) REFERENCES `reaction` (`id`),
   CONSTRAINT `reaction_tag_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `reaction` VALUES (1, "like");
 INSERT INTO `reaction` VALUES (2, "surprise");

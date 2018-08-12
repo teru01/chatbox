@@ -7,7 +7,7 @@ class BlogApp extends AppBase{
      */
     protected function doDbConnection(){
         $this->_connectModel->connect('master', [
-            'string'   =>  'mysql:dbname=chatbox;host='.getenv("DATABASE_HOST").';charset=utf8',
+            'string'   =>  'mysql:dbname=chatbox;host='.getenv("DATABASE_HOST").';charset=utf8mb4',
             'user'     =>  getenv("MYSQL_USER"),
             'password' =>  getenv("MYSQL_PASSWORD"),
         ]);
