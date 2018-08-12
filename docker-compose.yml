@@ -30,13 +30,14 @@ services:
 
   db:
     image: mariadb:10.2
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     container_name: db_c
     env_file:
       - .env
     expose:
       - "3306"
     volumes:
-      - ./db/initial.sql:/docker-entrypoint-initdb.d/initial.sql
+      - ./db/initial.sql:/docker-entrypoint-initdb.d/initial.sql:ro
       - db-data:/var/lib/mysql
 volumes:
   db-data:
