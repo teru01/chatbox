@@ -1,4 +1,7 @@
 # chatbox
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/teru01/chatbox.svg)](https://greenkeeper.io/)
+
 勉強用に作成したチャットアプリ。
 
 ```$xslt
